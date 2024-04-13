@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  color: white;
+  background: rgb(40, 40, 40);
+  font-family: "Nunito", sans-serif;
+}
+.right {
+  display: flex;
+}

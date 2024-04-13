@@ -21,7 +21,7 @@ const ChatBox = () => {
   const [btnDisabled, setBtnDisabled] = useState(true);
   const { recipientUser } = useFetchRecipient(currentChat, user);
   const scrollRef = useRef();
-
+  const recipientId = currentChat?.members.find((id) => id !== user?._id);
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, currentChat]);
@@ -103,7 +103,8 @@ const ChatBox = () => {
               textMessage,
               user?._id,
               currentChat?._id,
-              setTextMessage
+              setTextMessage,
+              recipientId
             );
           }}
           className="bg-[#161716]   p-2 flex gap-2 items-center  "

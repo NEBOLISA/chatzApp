@@ -8,7 +8,12 @@ import {
   useState,
 } from "react";
 import { io } from "socket.io-client";
-import { baseUrl, getRequest, postRequest } from "../utils/services";
+import {
+  baseUrl,
+  getRequest,
+  postRequest,
+  putRequest,
+} from "../utils/services";
 import { AuthContext } from "./AuthContext";
 
 export const ChatsContext = createContext();
@@ -28,9 +33,9 @@ export const ChatsContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [notificationMessageError, setNotificationMessageError] =
+    useState(null);
   const { user } = useContext(AuthContext);
-
-  console.log("notification", notifications);
 
   useEffect(() => {
     const newSocket = io("http://localhost:3000");
@@ -62,7 +67,7 @@ export const ChatsContextProvider = ({ children }) => {
   }, [newMessage]);
 
   // receive message
-
+  console.log("outer", notifications);
   useEffect(() => {
     if (socket === null) return;
     socket.on("getMessage", (res) => {
@@ -85,19 +90,46 @@ export const ChatsContextProvider = ({ children }) => {
       socket.off("getNotification");
     };
   }, [socket, currentChat]);
+  // fetch notifications
   useEffect(() => {
+    const getNotifications = async () => {
+      const response = await getRequest(
+        `${baseUrl}/notifications/${user?._id}`
+      );
+      console.log("notification", response);
+      if (response.error) {
+        return console.error(response.message);
+      }
+      if (user?._id) setNotifications((prev) => [...prev, ...response]);
+    };
+
+    getNotifications();
+  }, [user?._id]);
+  useEffect(() => {
+    const updateNotification = async (senderId) => {
+      const response = await putRequest(
+        `${baseUrl}/notifications`,
+        JSON.stringify({
+          senderId,
+          isRead: true,
+        })
+      );
+      if (response.error) {
+        return setNotificationMessageError(response);
+      }
+      console.log(response.message);
+    };
     const currentlyOpenId = currentChat?.members.find((id) => id !== user?._id);
     if (currentlyOpenId && notifications.length > 0) {
       if (notifications) {
-        const newArray = notifications?.map((not) => {
-          if (not?.senderId === currentlyOpenId) {
-            return { ...not, isRead: true };
-          } else {
-            return { ...not };
-          }
-        });
+        const newArray = notifications?.map((not) =>
+          not?.senderId === currentlyOpenId
+            ? { ...not, isRead: true }
+            : { ...not }
+        );
         setNotifications([...newArray]);
       }
+      updateNotification(currentlyOpenId);
     }
   }, [currentChat]);
   useEffect(() => {
@@ -119,6 +151,7 @@ export const ChatsContextProvider = ({ children }) => {
   const updateCurrentChat = (chat) => {
     setCurrentChat(chat);
   };
+
   useEffect(() => {
     const getMessages = async () => {
       setIsMessagesLoading(true);
@@ -159,7 +192,13 @@ export const ChatsContextProvider = ({ children }) => {
   }, [chats, user]);
 
   const sendMessage = useCallback(
-    async (textMessage, senderId, currentChatId, setTextMessage) => {
+    async (
+      textMessage,
+      senderId,
+      currentChatId,
+      setTextMessage,
+      receiverId
+    ) => {
       if (!textMessage) return console.log("You must type something...");
       const response = await postRequest(
         `${baseUrl}/messages`,
@@ -169,16 +208,29 @@ export const ChatsContextProvider = ({ children }) => {
           text: textMessage,
         })
       );
+      const response2 = await postRequest(
+        `${baseUrl}/notifications`,
+        JSON.stringify({
+          senderId,
+          receiverId,
+          isRead: false,
+        })
+      );
       if (response.error) {
         return setSendTextMessageError(response);
       }
+      if (response2.error) {
+        return setNotificationMessageError(response);
+      }
       setNewMessage(response);
       setMessages((prev) => [...prev, response]);
+      //setNotifications(response2)
       setTextMessage("");
     },
     []
   );
-
+  //get user notification
+  useEffect(() => {}, []);
   const createChat = useCallback(async (firstId, secondId) => {
     const response = await postRequest(
       `${baseUrl}/chats`,

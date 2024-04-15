@@ -1,7 +1,6 @@
 import placeholder from "../../assets/icons/placeholder.png";
 const CustomSkeleton = ({ size }) => {
   let num = Array(size).fill(0);
-  console.log(num);
 
   return num.map((_, i) => (
     <div className=" w-[350px]  animate-pulse  my-6 " key={i}>

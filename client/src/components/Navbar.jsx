@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { ChatsContext } from "../contexts/ChatsContext";
+import Notification from "./Notification";
 
 const Navbar = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -19,7 +20,7 @@ const Navbar = () => {
   return (
     <div
       className="bg-slate-950
-    h-14 mb-4  "
+    h-14 mb-4 relative "
     >
       <div className="mx-auto h-full items-center w-3/4 flex justify-between">
         <h2 className=" text-2xl">
@@ -35,10 +36,13 @@ const Navbar = () => {
         )}
         <ul className="flex items-center justify-center gap-4">
           {user ? (
-            <li onClick={logout}>
-              {" "}
-              <Link to="/login">Logout</Link>
-            </li>
+            <div className="flex items-center justify-center gap-8">
+              <Notification />
+              <li onClick={logout}>
+                {" "}
+                <Link to="/login">Logout</Link>
+              </li>
+            </div>
           ) : (
             <>
               <li>

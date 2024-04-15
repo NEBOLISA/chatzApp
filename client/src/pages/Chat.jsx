@@ -22,9 +22,9 @@ const Chat = () => {
         <div className="flex gap-12 ">
           <div className="flex-[50%]">
             {isChatsLoading && (
-              <p className="w-max">
+              <div className="w-max">
                 <CustomSkeleton size={6} />
-              </p>
+              </div>
             )}
             {chats &&
               chats?.map((chat, index) => {

@@ -25,6 +25,7 @@ export const ChatsContextProvider = ({ children }) => {
   const [potentialChats, setPotentialChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState(null);
+  const [allMessages, setAllMessages] = useState(null);
   const [isMessagesLoading, setIsMessagesLoading] = useState(null);
   const [messagesError, setMessagesError] = useState(null);
   const [sendTextMessageError, setSendTextMessageError] = useState(null);
@@ -35,6 +36,7 @@ export const ChatsContextProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [notificationMessageError, setNotificationMessageError] =
     useState(null);
+  const [allUsers, setAllUsers] = useState([]);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -67,12 +69,14 @@ export const ChatsContextProvider = ({ children }) => {
   }, [newMessage]);
 
   // receive message
-  console.log("outer", notifications);
+
   useEffect(() => {
     if (socket === null) return;
+
     socket.on("getMessage", (res) => {
       if (currentChat?._id !== res.chatId) return;
       setMessages((prev) => [...prev, res]);
+      setAllMessages((prev) => [...prev, res]);
     });
     socket.on("getNotification", (res) => {
       const isChatOpen = currentChat?.members.some(
@@ -96,7 +100,7 @@ export const ChatsContextProvider = ({ children }) => {
       const response = await getRequest(
         `${baseUrl}/notifications/${user?._id}`
       );
-      console.log("notification", response);
+
       if (response.error) {
         return console.error(response.message);
       }
@@ -105,33 +109,7 @@ export const ChatsContextProvider = ({ children }) => {
 
     getNotifications();
   }, [user?._id]);
-  useEffect(() => {
-    const updateNotification = async (senderId) => {
-      const response = await putRequest(
-        `${baseUrl}/notifications`,
-        JSON.stringify({
-          senderId,
-          isRead: true,
-        })
-      );
-      if (response.error) {
-        return setNotificationMessageError(response);
-      }
-      console.log(response.message);
-    };
-    const currentlyOpenId = currentChat?.members.find((id) => id !== user?._id);
-    if (currentlyOpenId && notifications.length > 0) {
-      if (notifications) {
-        const newArray = notifications?.map((not) =>
-          not?.senderId === currentlyOpenId
-            ? { ...not, isRead: true }
-            : { ...not }
-        );
-        setNotifications([...newArray]);
-      }
-      updateNotification(currentlyOpenId);
-    }
-  }, [currentChat]);
+
   useEffect(() => {
     const getChats = async () => {
       setIsChatsLoading(true);
@@ -151,7 +129,17 @@ export const ChatsContextProvider = ({ children }) => {
   const updateCurrentChat = (chat) => {
     setCurrentChat(chat);
   };
+  useEffect(() => {
+    const getAllMessages = async () => {
+      const response = await getRequest(`${baseUrl}/messages`);
 
+      if (response.error) {
+        return console.log(response.message);
+      }
+      setAllMessages(response);
+    };
+    getAllMessages();
+  }, [messages, notifications]);
   useEffect(() => {
     const getMessages = async () => {
       setIsMessagesLoading(true);
@@ -167,12 +155,40 @@ export const ChatsContextProvider = ({ children }) => {
     };
     getMessages();
   }, [currentChat]);
+  const updateNotification = async (senderId) => {
+    const response = await putRequest(
+      `${baseUrl}/notifications`,
+      JSON.stringify({
+        senderId,
+        isRead: true,
+      })
+    );
+    if (response.error) {
+      return setNotificationMessageError(response);
+    }
+  };
+  useEffect(() => {
+    const currentlyOpenId = currentChat?.members.find((id) => id !== user?._id);
+    if (currentlyOpenId && notifications.length > 0) {
+      if (notifications) {
+        const newArray = notifications?.map((not) =>
+          not?.senderId === currentlyOpenId
+            ? { ...not, isRead: true }
+            : { ...not }
+        );
+
+        messages?.length > 0 && setNotifications([...newArray]);
+      }
+      updateNotification(currentlyOpenId);
+    }
+  }, [currentChat, messages]);
   useEffect(() => {
     const getPotentialUsers = async () => {
       const response = await getRequest(`${baseUrl}/users`);
       if (response.error) {
         return console.log("Error fetching users", response);
       }
+
       let filteredUsers = [];
       filteredUsers = response.filter((User) => {
         let isChatCreated = false;
@@ -185,9 +201,11 @@ export const ChatsContextProvider = ({ children }) => {
         }
         return !isChatCreated;
       });
+      setAllUsers(response);
       if (filteredUsers.length < response.length - 1)
         setPotentialChats(filteredUsers);
     };
+
     getPotentialUsers();
   }, [chats, user]);
 
@@ -267,6 +285,10 @@ export const ChatsContextProvider = ({ children }) => {
         setMessages,
         setPotentialChats,
         notifications,
+        allMessages,
+        allUsers,
+        setNotifications,
+        updateNotification,
       }}
     >
       {children}

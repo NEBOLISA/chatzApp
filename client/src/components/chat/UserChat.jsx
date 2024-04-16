@@ -9,7 +9,7 @@ import { useFetchLastMessage } from "../../hooks/useFetchLastMessage";
 /* eslint-disable react/prop-types */
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipient(chat, user);
-  const { onlineUsers, notifications } = useContext(ChatsContext);
+  const { onlineUsers, notifications, newMessage } = useContext(ChatsContext);
   const [NumOfUnreadNots, setNumOfUnreadNots] = useState(0);
 
   const { latestMessage, error } = useFetchLastMessage(chat);
@@ -24,10 +24,10 @@ const UserChat = ({ chat, user }) => {
   }, [notifications]);
   const reduceTextSize = (text) => {
     let textToDisplay;
-    if (text.length > 20) {
+    if (text?.length > 20) {
       textToDisplay = `${text.substring(0, 20)}...`;
     } else {
-      textToDisplay = text.substring(0, 20);
+      textToDisplay = text?.substring(0, 20);
     }
 
     return textToDisplay;
@@ -42,7 +42,8 @@ const UserChat = ({ chat, user }) => {
         <div>
           <div className="font-semibold">{recipientUser?.name}</div>
           <div className="font-light text-sm text-[#AEAEAE] ">
-            {latestMessage?.text && reduceTextSize(latestMessage?.text)}
+            {(latestMessage?.text && reduceTextSize(latestMessage?.text)) ||
+              reduceTextSize(newMessage?.text)}
           </div>
         </div>
       </div>

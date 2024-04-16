@@ -37,6 +37,7 @@ export const ChatsContextProvider = ({ children }) => {
   const [notificationMessageError, setNotificationMessageError] =
     useState(null);
   const [allUsers, setAllUsers] = useState([]);
+
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -76,7 +77,6 @@ export const ChatsContextProvider = ({ children }) => {
     socket.on("getMessage", (res) => {
       if (currentChat?._id !== res.chatId) return;
       setMessages((prev) => [...prev, res]);
-      setAllMessages((prev) => [...prev, res]);
     });
     socket.on("getNotification", (res) => {
       const isChatOpen = currentChat?.members.some(
@@ -88,12 +88,25 @@ export const ChatsContextProvider = ({ children }) => {
       } else {
         setNotifications((prev) => [res, ...prev]);
       }
+      const isChatCreated = chats.find(
+        (chat) =>
+          (chat?.members[0] === res.receiverId &&
+            chat?.members[1] === res.senderId) ||
+          (chat?.members[0] === res.senderId &&
+            chat?.members[1] === res.receiverId)
+      );
+      console.log(isChatCreated);
+      if (isChatCreated) {
+        return;
+      } else {
+        createChat(res.senderId, res.receiverId);
+      }
     });
     return () => {
       socket.off("getMessage");
       socket.off("getNotification");
     };
-  }, [socket, currentChat]);
+  }, [socket, currentChat, chats]);
   // fetch notifications
   useEffect(() => {
     const getNotifications = async () => {
@@ -238,7 +251,6 @@ export const ChatsContextProvider = ({ children }) => {
     []
   );
   //get user notification
-  useEffect(() => {}, []);
   const createChat = useCallback(async (firstId, secondId) => {
     const response = await postRequest(
       `${baseUrl}/chats`,

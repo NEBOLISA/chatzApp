@@ -129,17 +129,7 @@ export const ChatsContextProvider = ({ children }) => {
   const updateCurrentChat = (chat) => {
     setCurrentChat(chat);
   };
-  useEffect(() => {
-    const getAllMessages = async () => {
-      const response = await getRequest(`${baseUrl}/messages`);
 
-      if (response.error) {
-        return console.log(response.message);
-      }
-      setAllMessages(response);
-    };
-    getAllMessages();
-  }, [messages, notifications]);
   useEffect(() => {
     const getMessages = async () => {
       setIsMessagesLoading(true);
@@ -285,7 +275,7 @@ export const ChatsContextProvider = ({ children }) => {
         setMessages,
         setPotentialChats,
         notifications,
-        allMessages,
+
         allUsers,
         setNotifications,
         updateNotification,

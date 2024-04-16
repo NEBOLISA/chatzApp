@@ -5,14 +5,14 @@ import { useFetchRecipient } from "../../hooks/useFetchRecipient";
 
 import { ChatsContext } from "../../contexts/ChatsContext";
 import moment from "moment";
+import { useFetchLastMessage } from "../../hooks/useFetchLastMessage";
 /* eslint-disable react/prop-types */
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipient(chat, user);
-  const { onlineUsers, currentChat, messages, notifications, allMessages } =
-    useContext(ChatsContext);
+  const { onlineUsers, notifications } = useContext(ChatsContext);
   const [NumOfUnreadNots, setNumOfUnreadNots] = useState(0);
-  const [lastMessage, setLastMessage] = useState([]);
-  //let NumOfUnreadNots;
+
+  const { latestMessage, error } = useFetchLastMessage(chat);
   const recipientId = chat?.members.find((id) => id !== user?._id);
 
   useEffect(() => {
@@ -22,24 +22,16 @@ const UserChat = ({ chat, user }) => {
     const unreadNot = chatNot?.filter((not) => not?.isRead === false);
     setNumOfUnreadNots(unreadNot.length);
   }, [notifications]);
-  useEffect(() => {
-    const chatLastMessage = allMessages?.filter(
-      (msg) => msg.chatId === chat?._id
-    );
-
-    const chatLength = chatLastMessage?.length;
-
-    // if (chatLength === chatLastMessage?.length) {
-    if (chatLength) {
-      const getLastMessage = chatLastMessage[chatLength - 1];
-
-      setLastMessage(getLastMessage);
-      // }
+  const reduceTextSize = (text) => {
+    let textToDisplay;
+    if (text.length > 20) {
+      textToDisplay = `${text.substring(0, 20)}...`;
+    } else {
+      textToDisplay = text.substring(0, 20);
     }
-    // const lengthOfLast = messages.length;
-    // setLastMessage(messages[lengthOfLast - 1]);
-    //setLastMessage(getLastMessage)
-  }, [allMessages, messages]);
+
+    return textToDisplay;
+  };
 
   return (
     <div className="flex justify-between cursor-pointer w-[450px] my-6 border-b-[.3px] border-[#AEAEAE] pb-1">
@@ -50,13 +42,13 @@ const UserChat = ({ chat, user }) => {
         <div>
           <div className="font-semibold">{recipientUser?.name}</div>
           <div className="font-light text-sm text-[#AEAEAE] ">
-            {lastMessage?.text || "No message yet"}
+            {latestMessage?.text && reduceTextSize(latestMessage?.text)}
           </div>
         </div>
       </div>
       <div className="flex flex-col relative">
         <div className="text-[#AEAEAE]  text-[11px]">
-          {lastMessage?.text && moment(lastMessage?.createdAt).calendar()}
+          {latestMessage?.text && moment(latestMessage?.createdAt).calendar()}
         </div>
         {NumOfUnreadNots > 0 && (
           <div className="rounded-full text-[12px] bg-[#34bf95] self-end w-[17px] h-[17px] text-center">

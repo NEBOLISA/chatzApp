@@ -23,13 +23,5 @@ const getUserMessages = async (req, res) => {
     res.status(500).json(error);
   }
 };
-const getAllMessages = async (req, res) => {
-  const messages = await messageModel.find();
-  res.status(200).json(messages);
-  try {
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-};
-module.exports = { createMessage, getUserMessages, getAllMessages };
+
+module.exports = { createMessage, getUserMessages };

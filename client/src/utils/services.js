@@ -1,6 +1,33 @@
 /* eslint-disable no-unused-vars */
 export const baseUrl = "http://localhost:5000/api";
+import axios from "axios";
 
+export const postFileRequest = async (url, formData) => {
+  try {
+    const response = await axios.post(url, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error("Error:", error);
+    return { error: true, message: "An error occurred" };
+  }
+  // const data = await response.data;
+
+  // if (!response.ok) {
+  //   let message;
+  //   if (response?.data) {
+  //     message = response?.data;
+  //   } else {
+  //     message = response.data; //"Network error";
+  //   }
+
+  //   return { error: true, message };
+  // }
+  // return data;
+};
 export const postRequest = async (url, body) => {
   const response = await fetch(url, {
     method: "POST",

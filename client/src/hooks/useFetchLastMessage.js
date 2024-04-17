@@ -4,8 +4,9 @@ import { ChatsContext } from "../contexts/ChatsContext";
 
 export const useFetchLastMessage = (chat) => {
   const { newMessage, messages, notifications } = useContext(ChatsContext);
-  const [latestMessage, setLatestMessage] = useState(
-    messages[messages?.length - 1] || null
+
+  const [latestMessage, setLatestMessage] = useState(() =>
+    messages && messages.length > 0 ? messages[messages.length - 1] : null
   );
   const [error, setError] = useState(null);
 

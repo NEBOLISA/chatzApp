@@ -7,6 +7,7 @@ const PotentialChats = () => {
   const { user } = useContext(AuthContext);
   const { potentialChats, isChatsLoading, createChat, onlineUsers } =
     useContext(ChatsContext);
+
   if (isChatsLoading)
     return (
       <div className="flex mb-9 ">

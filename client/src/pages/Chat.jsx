@@ -17,7 +17,9 @@ const Chat = () => {
       <PotentialChats />
 
       {chats?.length === 0 ? (
-        <p>No Chats yet</p>
+        <p className="text-center w-[100%] h-[70vh] text-gray-400 font-bold text-2xl flex items-center justify-center">
+          No chats yet
+        </p>
       ) : (
         <div className="flex gap-12 ">
           <div className="flex-[50%]">

@@ -2,7 +2,6 @@ const express = require("express");
 const {
   createMessage,
   getUserMessages,
-  getAllMessages,
 } = require("../Controller/messageController");
 const router = express.Router();
 

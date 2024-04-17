@@ -95,11 +95,13 @@ export const ChatsContextProvider = ({ children }) => {
           (chat?.members[0] === res.senderId &&
             chat?.members[1] === res.receiverId)
       );
-      console.log(isChatCreated);
+
       if (isChatCreated) {
         return;
       } else {
         createChat(res.senderId, res.receiverId);
+        //setCurrentChat(isChatCreated);
+        //updateCurrentChat(isChatCreated);
       }
     });
     return () => {
@@ -188,6 +190,7 @@ export const ChatsContextProvider = ({ children }) => {
   useEffect(() => {
     const getPotentialUsers = async () => {
       const response = await getRequest(`${baseUrl}/users`);
+
       if (response.error) {
         return console.log("Error fetching users", response);
       }
@@ -205,8 +208,8 @@ export const ChatsContextProvider = ({ children }) => {
         return !isChatCreated;
       });
       setAllUsers(response);
-      if (filteredUsers.length < response.length - 1)
-        setPotentialChats(filteredUsers);
+
+      setPotentialChats(filteredUsers);
     };
 
     getPotentialUsers();

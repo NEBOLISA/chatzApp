@@ -42,8 +42,8 @@ const UserChat = ({ chat, user }) => {
         <div>
           <div className="font-semibold">{recipientUser?.name}</div>
           <div className="font-light text-sm text-[#AEAEAE] ">
-            {(latestMessage?.text && reduceTextSize(latestMessage?.text)) ||
-              reduceTextSize(newMessage?.text)}
+            {reduceTextSize(newMessage?.text) ||
+              (latestMessage?.text && reduceTextSize(latestMessage?.text))}
           </div>
         </div>
       </div>

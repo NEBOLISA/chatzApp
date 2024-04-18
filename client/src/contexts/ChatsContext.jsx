@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { io } from "socket.io-client";
@@ -19,6 +20,7 @@ import { AuthContext } from "./AuthContext";
 export const ChatsContext = createContext();
 
 export const ChatsContextProvider = ({ children }) => {
+  const { user } = useContext(AuthContext);
   const [chatsError, setChatsError] = useState(null);
   const [isChatsLoading, setIsChatsLoading] = useState(false);
   const [chats, setChats] = useState(null);
@@ -37,9 +39,11 @@ export const ChatsContextProvider = ({ children }) => {
   const [notificationMessageError, setNotificationMessageError] =
     useState(null);
   const [allUsers, setAllUsers] = useState([]);
-
-  const { user } = useContext(AuthContext);
-
+  const [profilePic, setProfilePic] = useState(null);
+  const [profilePictures, setProfilePictures] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [changedName, setChangedName] = useState(null);
+  const modalMenuItemRef = useRef(null);
   useEffect(() => {
     const newSocket = io("http://localhost:3000");
     setSocket(newSocket);
@@ -48,7 +52,9 @@ export const ChatsContextProvider = ({ children }) => {
       newSocket.disconnect();
     };
   }, [user]);
-
+  useEffect(() => {
+    setChangedName(user?.name);
+  }, [isModalOpen]);
   useEffect(() => {
     if (socket === null) return;
     socket.emit("addNewUser", user?._id);
@@ -196,8 +202,8 @@ export const ChatsContextProvider = ({ children }) => {
       }
 
       let filteredUsers = [];
-      filteredUsers = response.filter((User) => {
-        let isChatCreated = false;
+      filteredUsers = await response.filter((User) => {
+        let isChatCreated;
         if (user?._id === User?._id) return false;
         if (chats) {
           isChatCreated = chats?.some(
@@ -208,13 +214,37 @@ export const ChatsContextProvider = ({ children }) => {
         return !isChatCreated;
       });
       setAllUsers(response);
-
       setPotentialChats(filteredUsers);
     };
 
     getPotentialUsers();
-  }, [chats, user]);
+  }, [chats]);
+  useEffect(() => {
+    const getAllPics = async () => {
+      const response = await getRequest(`${baseUrl}/uploads/`);
+      if (response.error) {
+        return console.log("Error fetching pictures", response);
+      }
+      setProfilePictures(response);
+    };
+    getAllPics();
+  }, [potentialChats]);
 
+  useEffect(() => {
+    const getProfilePic = async () => {
+      const response = await getRequest(`${baseUrl}/uploads/${user?._id}`);
+
+      if (response?.error) {
+        return console.log("Error fetching users", response);
+      }
+      setProfilePic(response);
+    };
+
+    getProfilePic();
+  }, [user, potentialChats]);
+  const handleOpenModal = useCallback(() => {
+    setIsModalOpen(!isModalOpen);
+  }, [isModalOpen]);
   const sendMessage = useCallback(
     async (
       textMessage,
@@ -294,6 +324,14 @@ export const ChatsContextProvider = ({ children }) => {
         allUsers,
         setNotifications,
         updateNotification,
+        profilePic,
+        profilePictures,
+        handleOpenModal,
+        isModalOpen,
+        setIsModalOpen,
+        changedName,
+        setChangedName,
+        modalMenuItemRef,
       }}
     >
       {children}

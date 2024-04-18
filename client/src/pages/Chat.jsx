@@ -7,13 +7,14 @@ import ChatBox from "../components/chat/ChatBox";
 import CustomSkeleton from "../components/skeletons/CustomSkeleton";
 
 import ChatBoxSkeleton from "../components/skeletons/ChatBoxSkeleton";
+import SettingModal from "../components/modal/SettingModal";
 const Chat = () => {
-  const { chats, isChatsLoading, updateCurrentChat, currentChat } =
+  const { chats, isChatsLoading, updateCurrentChat, currentChat, isModalOpen } =
     useContext(ChatsContext);
   const { user } = useContext(AuthContext);
 
   return (
-    <div>
+    <div className="h-lvh">
       <PotentialChats />
 
       {chats?.length === 0 ? (
@@ -21,8 +22,8 @@ const Chat = () => {
           No chats yet
         </p>
       ) : (
-        <div className="flex gap-12 ">
-          <div className="flex-[50%]">
+        <div className="flex gap-12  ">
+          <div className="flex-[50%] border-x-[.2px] w-[450px] h-lvh    bg-white overflow-y-scroll ">
             {isChatsLoading && (
               <div className="w-max">
                 <CustomSkeleton size={6} />
@@ -31,12 +32,17 @@ const Chat = () => {
             {chats &&
               chats?.map((chat, index) => {
                 return (
-                  <div key={index} onClick={() => updateCurrentChat(chat)}>
+                  <div
+                    className=""
+                    key={index}
+                    onClick={() => updateCurrentChat(chat)}
+                  >
                     <UserChat chat={chat} user={user} />
                   </div>
                 );
               })}
           </div>
+
           <div className="flex-[60%]">
             {isChatsLoading ? (
               <ChatBoxSkeleton count={5} />
@@ -51,6 +57,12 @@ const Chat = () => {
           </div>
         </div>
       )}
+
+      <SettingModal
+        isModalOpen={isModalOpen}
+        headerText={"Edit Name"}
+        user={user}
+      />
     </div>
   );
 };

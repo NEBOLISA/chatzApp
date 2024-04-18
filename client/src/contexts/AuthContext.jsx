@@ -23,6 +23,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+
   //const [formData, setFormData] = useState(null);
 
   useEffect(() => {

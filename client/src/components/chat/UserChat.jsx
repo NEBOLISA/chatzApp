@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
-import avatar from "../../assets/avatar.svg";
+import NoProfile from "../../assets/avatar.svg";
 import { useFetchRecipient } from "../../hooks/useFetchRecipient";
 
 import { ChatsContext } from "../../contexts/ChatsContext";
@@ -9,7 +9,8 @@ import { useFetchLastMessage } from "../../hooks/useFetchLastMessage";
 /* eslint-disable react/prop-types */
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipient(chat, user);
-  const { onlineUsers, notifications, newMessage } = useContext(ChatsContext);
+  const { onlineUsers, notifications, newMessage, profilePictures } =
+    useContext(ChatsContext);
   const [NumOfUnreadNots, setNumOfUnreadNots] = useState(0);
 
   const { latestMessage, error } = useFetchLastMessage(chat);
@@ -34,14 +35,27 @@ const UserChat = ({ chat, user }) => {
   };
 
   return (
-    <div className="flex justify-between cursor-pointer w-[450px] my-6 border-b-[.3px] border-[#AEAEAE] pb-1">
-      <div className="flex gap-3">
+    <div className="flex justify-between cursor-pointer    border-b-[.3px]  border-[#AEAEAE] h-[70px] py-2 px-2 hover:bg-[#e4e4e4]">
+      <div className="flex gap-3 items-center">
         <div>
-          <img className="w-[30px] h-[30px]" src={avatar} alt="profile-pic" />
+          <img
+            className="w-[30px] h-[30px] rounded-full"
+            src={
+              profilePictures.find((pic) => pic?.userId === recipientId)
+                ?.fileName
+                ? `http://localhost:5000/uploads/` +
+                  profilePictures.find((pic) => pic?.userId === recipientId)
+                    ?.fileName
+                : NoProfile
+            }
+            alt="profile-pic"
+          />
         </div>
-        <div>
-          <div className="font-semibold">{recipientUser?.name}</div>
-          <div className="font-light text-sm text-[#AEAEAE] ">
+        <div className="text-gray-800">
+          <div className="font-semibold text-gray-800">
+            {recipientUser?.name}
+          </div>
+          <div className="font-light text-sm text-[#383838] ">
             {reduceTextSize(newMessage?.text) ||
               (latestMessage?.text && reduceTextSize(latestMessage?.text))}
           </div>
@@ -57,7 +71,7 @@ const UserChat = ({ chat, user }) => {
           </div>
         )}
         {onlineUsers.some((user) => user.userId === recipientUser?._id) && (
-          <span className="bg-green-500 rounded-full absolute w-[8px] h-[8px] -top-[10px] -right-1 "></span>
+          <span className="bg-green-500 rounded-full absolute w-[8px] h-[8px] -top-[4px] -right-1 "></span>
         )}
       </div>
     </div>

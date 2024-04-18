@@ -10,10 +10,10 @@ function App() {
   const { user } = useContext(AuthContext);
   return (
     <BrowserRouter>
-      <>
+      <div className="h-lvh overflow-y-hidden">
         <Navbar />
 
-        <div className="mx-auto w-3/4 ">
+        <div className="mx-auto w-3/4 relative  ">
           <Routes>
             <Route path="/" element={user ? <Chat /> : <Login />}></Route>
             <Route path="/login" element={user ? <Chat /> : <Login />}></Route>
@@ -24,7 +24,7 @@ function App() {
             <Route path="/*" element={<Navigate to="/" />}></Route>
           </Routes>
         </div>
-      </>
+      </div>
     </BrowserRouter>
   );
 }

@@ -19,4 +19,23 @@ const postImage = async (req, res) => {
     console.log(error);
   }
 };
-module.exports = { postImage };
+
+const getUserProfilePic = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const profilePic = await imageSchema.findOne({ userId });
+    res.status(200).json(profilePic);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+const getAllPics = async (req, res) => {
+  const pictures = await imageSchema.find();
+  res.status(200).json(pictures);
+  try {
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+module.exports = { postImage, getUserProfilePic, getAllPics };

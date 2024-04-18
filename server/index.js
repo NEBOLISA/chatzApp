@@ -8,10 +8,12 @@ const chatRoute = require("./Routes/chatRoute");
 const messageRoute = require("./Routes/messageRoute");
 const notificationRoute = require("./Routes/notificationRoute");
 const imageRoute = require("./Routes/imageRoute");
+const path = require("path");
 
 app.use(express.json());
 app.use(cors());
-
+const uploadsPath = path.join(__dirname, "uploads");
+app.use("/uploads", express.static(uploadsPath));
 app.use("/api/users", userRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);

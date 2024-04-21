@@ -51,14 +51,14 @@ const ChatBox = () => {
   }
 
   return (
-    <div className="w-[100%] relative bg-[#080808] rounded-lg  h-[80vh]  flex flex-col justify-between ">
-      <div className=" flex  overflow-y-hidden flex-col h-[100vh]">
-        <p className="bg-[#161716] text-center p-2 rounded-tl-lg rounded-tr-lg">
+    <div className="w-[100%]    h-[70vh] relative bg-[#cccdd5] rounded-lg    flex flex-col justify-between ">
+      <div className=" flex h-full overflow-y-hidden flex-col ">
+        <p className=" bg-[#e7e7e7] text-gray-600 text-center p-2 rounded-tl-lg rounded-tr-lg">
           <strong>
             {isMessagesLoading ? "Loading.." : recipientUser?.name}
           </strong>
         </p>
-        <div className="overflow-y-auto   relative flex-1 flex flex-col ">
+        <div className="  relative flex-1 flex flex-col overflow-y-scroll ">
           {messages &&
             messages.map((message, index) => (
               <div
@@ -73,7 +73,7 @@ const ChatBox = () => {
                   className={`${
                     message?.senderId === user?._id
                       ? "bg-[#00bd9b] self-end "
-                      : " bg-[#383838]"
+                      : " bg-white text-gray-600"
                   } p-3 rounded-[5px] max-w-fit   flex flex-col mt-8 font-light text-md mx-3`}
                 >
                   <span className="">{message.text}</span>
@@ -86,7 +86,7 @@ const ChatBox = () => {
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
-                    fill="currentColor"
+                    fill="blue"
                     className="bi bi-check-all"
                     viewBox="0 0 16 16"
                   >
@@ -96,57 +96,57 @@ const ChatBox = () => {
               </div>
             ))}
         </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            sendMessage(
-              textMessage,
-              user?._id,
-              currentChat?._id,
-              setTextMessage,
-              recipientId
-            );
-          }}
-          className="bg-[#161716]   p-2 flex gap-2 items-center  "
-        >
-          <InputEmoji
-            value={textMessage}
-            onChange={setTextMessage}
-            fontFamily="nunito"
-            borderColor="rgba(72,112,223,0.2)"
-          />
-          {sendTextMessageError && (
-            <p className="text-center flex justify-center items-center text-red-300">
-              {sendTextMessageError}
-            </p>
-          )}
-          <button
-            disabled={btnDisabled}
-            className={`${
-              btnDisabled === true ? "bg-gray-500" : "bg-blue-500 "
-            } rounded-full  w-[30px]  h-[30px] flex items-center justify-center`}
-            // onClick={() =>
-            //   sendMessage(
-            //     textMessage,
-            //     user?._id,
-            //     currentChat?._id,
-            //     setTextMessage
-            //   )
-            // }
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill={`${btnDisabled ? "#999999" : "white"}`}
-              className="bi bi-send-fill"
-              viewBox="0 0 16 16"
-            >
-              <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
-            </svg>
-          </button>
-        </form>
       </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendMessage(
+            textMessage,
+            user?._id,
+            currentChat?._id,
+            setTextMessage,
+            recipientId
+          );
+        }}
+        className="bg-[#e7e7e7]   p-2 flex gap-2 items-center  "
+      >
+        <InputEmoji
+          value={textMessage}
+          onChange={setTextMessage}
+          fontFamily="nunito"
+          borderColor="rgba(72,112,223,0.2)"
+        />
+        {sendTextMessageError && (
+          <p className="text-center flex justify-center items-center text-red-300">
+            {sendTextMessageError}
+          </p>
+        )}
+        <button
+          disabled={btnDisabled}
+          className={`${
+            btnDisabled === true ? "bg-gray-500" : "bg-blue-500 "
+          } rounded-full  w-[30px]  h-[30px] flex items-center justify-center`}
+          // onClick={() =>
+          //   sendMessage(
+          //     textMessage,
+          //     user?._id,
+          //     currentChat?._id,
+          //     setTextMessage
+          //   )
+          // }
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill={`${btnDisabled ? "#999999" : "white"}`}
+            className="bi bi-send-fill"
+            viewBox="0 0 16 16"
+          >
+            <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
+          </svg>
+        </button>
+      </form>
     </div>
   );
 };

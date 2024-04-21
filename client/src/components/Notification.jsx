@@ -41,9 +41,7 @@ const Notification = () => {
     setNotifications([...clearedNot]);
   };
   const openChat = (senderId, receiverId) => {
-    console.log(senderId, receiverId);
     if (senderId && receiverId) {
-      //   console.log(chats);
       const chatToOpen = chats.find(
         (chat) =>
           (chat?.members[0] === receiverId && chat?.members[1] === senderId) ||
@@ -90,15 +88,17 @@ const Notification = () => {
 
         <div
           className="
-          bg-slate-200 group-hover:visible group-hover:opacity-100 invisible opacity-0 transition-all ease-in duration-70   -right-7 top-8 text-sm cursor pointer p-[6px] text-black rounded-lg absolute"
+          bg-slate-200 group-hover:visible group-hover:opacity-100 invisible opacity-0 transition-all ease-in duration-70 z-20  -right-7 top-8 text-sm cursor pointer p-[6px] text-black rounded-lg absolute"
         >
           Notifications
         </div>
       </div>
       <div
         className={`${
-          isOpen ? "visible opacity-100 " : "invisible opacity-0 "
-        }transition-all z-20 ease-in duration-70 bg-[#383838] shadow-lg w-[300px] absolute top-12 right-44 rounded-xl`}
+          isOpen
+            ? "visible opacity-100 translate-y-0 transition duration-300 ease-in"
+            : "invisible opacity-0 -translate-y-5 transition duration-300 ease-out "
+        }transition-all  before:content-[''] before:-z-10 before:absolute before:-top-0 before:left-[60px] before:h-5 before:w-6 before:bg-white before:rotate-45 z-20 ease-in duration-70 bg-white text-gray-700 shadow-2xl w-[300px] absolute pb-2 top-12 right-44 rounded-xl`}
       >
         <div className="flex justify-between items-center p-3 ">
           <h3 className="text-lg font-semibold">Notifications</h3>
@@ -111,7 +111,7 @@ const Notification = () => {
         {unReadNotif.length > 0 ? (
           unReadNotif.map((not, index) => (
             <div
-              className="p-2 cursor-pointer border-b-[.4px] border-white bg-[#525252] my-3"
+              className="p-2 cursor-pointer border-b-[.4px] transition-all duration-150 ease-in border-gray-400 hover:bg-[#d4d4d4] bg-[#ecebeb] mt-[2px]"
               key={index}
               onClick={() => openChat(not?.senderId, not?.receiverId)}
             >

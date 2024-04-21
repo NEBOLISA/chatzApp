@@ -5,15 +5,17 @@ import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/AuthContext";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const { user } = useContext(AuthContext);
   return (
     <BrowserRouter>
-      <div className="h-lvh overflow-y-hidden">
+      <div className="  ">
+        <ToastContainer />
         <Navbar />
 
-        <div className="mx-auto w-3/4 relative  ">
+        <div className="mx-auto w-3/4    ">
           <Routes>
             <Route path="/" element={user ? <Chat /> : <Login />}></Route>
             <Route path="/login" element={user ? <Chat /> : <Login />}></Route>

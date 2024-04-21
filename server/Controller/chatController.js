@@ -39,5 +39,25 @@ const getSingleChat = async (req, res) => {
     res.status(500).json(error);
   }
 };
+const deleteSingleChat = async (req, res) => {
+  const { chatId } = req.params;
+  try {
+    const chat = await chatModel.findById(chatId);
 
-module.exports = { createChat, getAllUserChats, getSingleChat };
+    if (chat) {
+      const response = await chat.deleteOne();
+      res.status(200).json(response);
+    } else {
+      res.status(404).json({ message: "Chat not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  createChat,
+  getAllUserChats,
+  getSingleChat,
+  deleteSingleChat,
+};

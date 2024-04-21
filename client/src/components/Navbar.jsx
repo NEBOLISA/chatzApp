@@ -97,23 +97,25 @@ const Navbar = () => {
                 </div>
                 <div
                   className={`${
-                    isOpen ? "visible opacity-100 " : "invisible opacity-0 "
-                  }transition-all  z-20 ease-in duration-70 bg-[#383838] shadow-lg w-[250px] absolute top-12 right-4 rounded-xl`}
+                    isOpen
+                      ? "visible opacity-100 translate-y-0 transition duration-300 ease-in"
+                      : "invisible opacity-0 -translate-y-5 transition duration-300 ease-out "
+                  }transition-all   before:content-[''] before:absolute before:-top-0 before:left-[60px] before:h-5 before:w-6 before:bg-white before:rotate-45 z-20 before:-z-10 ease-in duration-70 bg-white text-gray-700 shadow-2xl w-[250px] absolute top-12 right-4 rounded-xl`}
                 >
                   <ul className="my-2">
                     <li
                       ref={modalMenuItemRef}
-                      className="cursor-pointer hover:bg-[#4f4f4f] transition-all ease-in duration-75  p-2"
+                      className="cursor-pointer hover:bg-gray-200 transition-all ease-in duration-75  p-2"
                       onClick={handleOpenModal}
                     >
                       Edit Name
                     </li>
-                    <li className="cursor-pointer transition-all ease-in duration-75 p-2 hover:bg-[#4f4f4f]">
+                    <li className="cursor-pointer transition-all ease-in duration-75 p-2 hover:bg-gray-200">
                       Change Profile Picture
                     </li>
                     <li
                       onClick={logout}
-                      className="cursor-pointer transition-all ease-in duration-75 p-2 hover:bg-[#4f4f4f]"
+                      className="cursor-pointer transition-all ease-in duration-75 p-2 hover:bg-gray-200"
                     >
                       <Link to={"/login"}>Logout</Link>
                     </li>

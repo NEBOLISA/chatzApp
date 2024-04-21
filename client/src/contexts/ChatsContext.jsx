@@ -11,12 +11,14 @@ import {
 import { io } from "socket.io-client";
 import {
   baseUrl,
+  deleteRequest,
   getRequest,
   postRequest,
   putRequest,
 } from "../utils/services";
 import { AuthContext } from "./AuthContext";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const ChatsContext = createContext();
 
 export const ChatsContextProvider = ({ children }) => {
@@ -31,7 +33,6 @@ export const ChatsContextProvider = ({ children }) => {
   const [isMessagesLoading, setIsMessagesLoading] = useState(null);
   const [messagesError, setMessagesError] = useState(null);
   const [sendTextMessageError, setSendTextMessageError] = useState(null);
-
   const [newMessage, setNewMessage] = useState(null);
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -43,6 +44,8 @@ export const ChatsContextProvider = ({ children }) => {
   const [profilePictures, setProfilePictures] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [changedName, setChangedName] = useState(null);
+  const [deleteResponse, setDeleteResponse] = useState(null);
+  const [deleteErrorResponse, setDeleteErrorResponse] = useState(null);
   const modalMenuItemRef = useRef(null);
   useEffect(() => {
     const newSocket = io("http://localhost:3000");
@@ -297,7 +300,20 @@ export const ChatsContextProvider = ({ children }) => {
     }
     setChats((prev) => [...prev, response]);
   }, []);
+  const deleteChat = useCallback(
+    async (chatId) => {
+      const response = await deleteRequest(`${baseUrl}/chats/${chatId}`);
 
+      if (response?.error) {
+        return toast.error(response.message);
+      }
+
+      const mChats = chats?.filter((chat) => chat?._id !== chatId);
+
+      setChats([...mChats]);
+    },
+    [chats]
+  );
   return (
     <ChatsContext.Provider
       value={{
@@ -332,6 +348,9 @@ export const ChatsContextProvider = ({ children }) => {
         changedName,
         setChangedName,
         modalMenuItemRef,
+        deleteChat,
+        deleteResponse,
+        deleteErrorResponse,
       }}
     >
       {children}

@@ -130,7 +130,10 @@ const Register = () => {
             >
               Select a Profile Picture
             </label>
-            <span> {selectedFile ? selectedFile.name : "No file choosen"}</span>
+            <span className="text-gray-600">
+              {" "}
+              {selectedFile ? selectedFile.name : "No file choosen"}
+            </span>
           </div>
 
           <div className="flex justify-center relative mt-4">
@@ -138,7 +141,7 @@ const Register = () => {
               <img
                 src={imagePreview}
                 alt="Selected File"
-                className="w-[100px] h-[100px] object-cover rounded-full"
+                className="w-[100px] h-[100px] border-gray-500 border object-cover rounded-full"
               />
             )}
             {imagePreview && (
@@ -146,7 +149,7 @@ const Register = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
-                fill="white"
+                fill="gray"
                 className="bi bi-x-circle-fill text-white absolute -top-[14px] cursor-pointer "
                 viewBox="0 0 16 16"
                 onClick={removeImage}
@@ -171,7 +174,7 @@ const Register = () => {
           {registerError?.message && (
             <Alert text={registerError?.message} closeAlert={closeAlert} />
           )}
-          <p>
+          <p className="text-gray-600">
             Already registered{" "}
             <span className="text-blue-500 underline cursor-pointer">
               <Link to={"/login"}>Login</Link>

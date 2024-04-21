@@ -7,13 +7,27 @@ import { ChatsContext } from "../../contexts/ChatsContext";
 import moment from "moment";
 import { useFetchLastMessage } from "../../hooks/useFetchLastMessage";
 /* eslint-disable react/prop-types */
-const UserChat = ({ chat, user }) => {
+const UserChat = ({
+  chat,
+  user,
+  index,
+  toggleChatDropDown,
+  openChatIndices,
+  dropDownRef,
+}) => {
   const { recipientUser } = useFetchRecipient(chat, user);
-  const { onlineUsers, notifications, newMessage, profilePictures } =
-    useContext(ChatsContext);
+  const {
+    onlineUsers,
+    notifications,
+    chats,
+    newMessage,
+    profilePictures,
+    deleteChat,
+  } = useContext(ChatsContext);
   const [NumOfUnreadNots, setNumOfUnreadNots] = useState(0);
 
   const { latestMessage, error } = useFetchLastMessage(chat);
+
   const recipientId = chat?.members.find((id) => id !== user?._id);
 
   useEffect(() => {
@@ -35,7 +49,19 @@ const UserChat = ({ chat, user }) => {
   };
 
   return (
-    <div className="flex justify-between cursor-pointer    border-b-[.3px]  border-[#AEAEAE] h-[70px] py-2 px-2 hover:bg-[#e4e4e4]">
+    <div className="flex justify-between cursor-pointer relative   border-b-[.3px]  border-[#AEAEAE] h-[70px] py-2 px-2 hover:bg-[#e4e4e4] group">
+      {openChatIndices[index] === true && (
+        <div
+          className="bg-white text-gray-600 z-30  w-[170px] 
+      shadow-[-4px_-2px_14px_-2px_rgba(156,153,153,0.66)] absolute  top-6 right-2"
+        >
+          <ul>
+            <li className="p-2 text-sm" onClick={() => deleteChat(chat?._id)}>
+              Delete chat
+            </li>
+          </ul>
+        </div>
+      )}
       <div className="flex gap-3 items-center">
         <div>
           <img
@@ -61,9 +87,28 @@ const UserChat = ({ chat, user }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col relative">
-        <div className="text-[#AEAEAE]  text-[11px]">
+      <div className="flex flex-col gap-2  relative ">
+        <div className="text-[#AEAEAE] z-40 flex gap-2 mr-9 text-[11px]">
           {latestMessage?.text && moment(latestMessage?.createdAt).calendar()}
+          <div
+            ref={dropDownRef}
+            onClick={(e) => toggleChatDropDown(index, e)}
+            className="group-hover:opacity-100 absolute right-0 z-50 group-hover:visible opacity-0 invisible w-[30px]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="13"
+              height="13"
+              fill="black"
+              className="bi bi-chevron-down font-bold"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+              />
+            </svg>
+          </div>
         </div>
         {NumOfUnreadNots > 0 && (
           <div className="rounded-full text-[12px] bg-[#34bf95] self-end w-[17px] h-[17px] text-center">
@@ -71,7 +116,7 @@ const UserChat = ({ chat, user }) => {
           </div>
         )}
         {onlineUsers.some((user) => user.userId === recipientUser?._id) && (
-          <span className="bg-green-500 rounded-full absolute w-[8px] h-[8px] -top-[4px] -right-1 "></span>
+          <span className="bg-green-500 rounded-full absolute w-[8px] h-[8px] -top-[6px] right-[4px] "></span>
         )}
       </div>
     </div>

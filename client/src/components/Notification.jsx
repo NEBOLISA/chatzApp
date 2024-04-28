@@ -41,13 +41,14 @@ const Notification = () => {
     setNotifications([...clearedNot]);
   };
   const openChat = (senderId, receiverId) => {
+    //console.log(senderId, receiverId);
     if (senderId && receiverId) {
       const chatToOpen = chats.find(
         (chat) =>
-          (chat?.members[0] === receiverId && chat?.members[1] === senderId) ||
-          (chat?.members[0] === senderId && chat?.members[1] === receiverId)
+          chat?.members[0] === senderId && chat?.members[1] === receiverId //||
+        //(chat?.members[0] === senderId && chat?.members[1] === receiverId)
       );
-
+      //console.log(chatToOpen);
       updateCurrentChat(chatToOpen);
     }
 
@@ -113,7 +114,7 @@ const Notification = () => {
             <div
               className="p-2 cursor-pointer border-b-[.4px] transition-all duration-150 ease-in border-gray-400 hover:bg-[#d4d4d4] bg-[#ecebeb] mt-[2px]"
               key={index}
-              onClick={() => openChat(not?.senderId, not?.receiverId)}
+              onClick={() => openChat(not?.receiverId, not?.senderId)}
             >
               <p className="text-[12px] ">{`You have an unread message from ${
                 allUsers.find((user) => user?._id === not?.senderId)?.name

@@ -83,5 +83,17 @@ const getUsers = async (req, res) => {
     res.status(500).json(err);
   }
 };
+const updateUser = async (req, res) => {
+  try {
+    const { userId, changedName } = req.body;
+    const user = await userModel.findById(userId);
+    user.name = changedName;
 
-module.exports = { registerUser, loginUser, findUser, getUsers };
+    const response = await user.save();
+    res.status(200).json({ data: response, status: 200 });
+  } catch (error) {
+    console.error("Error updating user name:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+module.exports = { registerUser, loginUser, findUser, getUsers, updateUser };

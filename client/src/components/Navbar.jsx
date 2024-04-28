@@ -17,6 +17,10 @@ const Navbar = () => {
   } = useContext(ChatsContext);
   const [isOpen, setIsOpen] = useState(false);
   const settingsMenuRef = useRef(null);
+  // const [storageName,setStorageName] =useState(null)
+  // useEffect(()=>{
+  //   setStorageName(localStorage.get)
+  // },[user])
   const logout = () => {
     localStorage.removeItem("user");
 
@@ -55,7 +59,7 @@ const Navbar = () => {
           <span className="text-orange-300">
             Logged in as{" "}
             <span style={{ textTransform: "capitalize" }}>
-              {user?.name.split(" ")[0]}
+              {user?.name?.split(" ")[0]}
             </span>
           </span>
         )}

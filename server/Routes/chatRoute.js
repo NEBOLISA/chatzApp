@@ -9,7 +9,7 @@ const {
 
 router.post("/", createChat);
 router.get("/:userId", getAllUserChats);
-router.get("/find/:firstId/:secondId", getSingleChat);
-router.delete("/:chatId", deleteSingleChat);
+router.get("/find/:userId/:recipientId", getSingleChat);
+router.put("/:userId/:chatId", deleteSingleChat);
 
 module.exports = router;

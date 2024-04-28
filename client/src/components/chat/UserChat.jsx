@@ -14,6 +14,7 @@ const UserChat = ({
   toggleChatDropDown,
   openChatIndices,
   dropDownRef,
+  setOpenChatIndices,
 }) => {
   const { recipientUser } = useFetchRecipient(chat, user);
   const {
@@ -22,13 +23,15 @@ const UserChat = ({
     chats,
     newMessage,
     profilePictures,
-    deleteChat,
+
+    setChatToDelete,
+    setIsActionModalOpen,
   } = useContext(ChatsContext);
   const [NumOfUnreadNots, setNumOfUnreadNots] = useState(0);
 
   const { latestMessage, error } = useFetchLastMessage(chat);
 
-  const recipientId = chat?.members.find((id) => id !== user?._id);
+  const recipientId = chat?.members?.find((id) => id !== user?._id);
 
   useEffect(() => {
     const chatNot = notifications?.filter(
@@ -47,7 +50,14 @@ const UserChat = ({
 
     return textToDisplay;
   };
-
+  const handleDelete = (e, chatId) => {
+    setChatToDelete(chatId);
+    setIsActionModalOpen(true);
+    setOpenChatIndices((prevIndices) =>
+      prevIndices.map((isOpen) => (isOpen === true ? false : false))
+    );
+    e.stopPropagation();
+  };
   return (
     <div className="flex justify-between cursor-pointer relative   border-b-[.3px]  border-[#AEAEAE] h-[70px] py-2 px-2 hover:bg-[#e4e4e4] group">
       {openChatIndices[index] === true && (
@@ -56,7 +66,7 @@ const UserChat = ({
       shadow-[-4px_-2px_14px_-2px_rgba(156,153,153,0.66)] absolute  top-6 right-2"
         >
           <ul>
-            <li className="p-2 text-sm" onClick={() => deleteChat(chat?._id)}>
+            <li className="p-2 text-sm" onClick={(e) => handleDelete(e, chat)}>
               Delete chat
             </li>
           </ul>

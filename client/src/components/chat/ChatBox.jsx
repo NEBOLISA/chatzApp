@@ -14,9 +14,8 @@ const ChatBox = () => {
     messagesError,
     sendMessage,
     sendTextMessageError,
-
-    //NewMessage,
   } = useContext(ChatsContext);
+
   const [textMessage, setTextMessage] = useState("");
   const [btnDisabled, setBtnDisabled] = useState(true);
   const { recipientUser } = useFetchRecipient(currentChat, user);
@@ -39,9 +38,7 @@ const ChatBox = () => {
       </p>
     );
   }
-  // if (isMessagesLoading) {
-  //   return <p className="text-center w-[100%]"> Loading messages...</p>;
-  // }
+
   if (!recipientUser) {
     return (
       <p className="text-center text-gray-400 font-bold text-2xl w-[100%] h-[70vh] flex items-center justify-center">
@@ -105,7 +102,8 @@ const ChatBox = () => {
             user?._id,
             currentChat?._id,
             setTextMessage,
-            recipientId
+            recipientId,
+            true
           );
         }}
         className="bg-[#e7e7e7]   p-2 flex gap-2 items-center  "
@@ -126,14 +124,6 @@ const ChatBox = () => {
           className={`${
             btnDisabled === true ? "bg-gray-500" : "bg-blue-500 "
           } rounded-full  w-[30px]  h-[30px] flex items-center justify-center`}
-          // onClick={() =>
-          //   sendMessage(
-          //     textMessage,
-          //     user?._id,
-          //     currentChat?._id,
-          //     setTextMessage
-          //   )
-          // }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

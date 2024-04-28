@@ -34,7 +34,7 @@ const PotentialChats = () => {
   return (
     <div className="flex gap-3 pt-3 bg-[white] w-full items-center px-2 mb-5 cursor-pointer mt-[20px]">
       <div className="flex gap-3  h-[100px]  overflow-x-scroll w-max px-2  cursor-pointer">
-        {potentialChats.length > 0 ? (
+        {potentialChats?.length > 0 ? (
           potentialChats?.map((u, index) => (
             <div
               key={index}

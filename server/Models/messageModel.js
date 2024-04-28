@@ -2,8 +2,11 @@ const mongoose = require("mongoose");
 const messageSchema = new mongoose.Schema(
   {
     chatId: String,
+    members: Array,
+    deleteId: Array,
     senderId: String,
     text: String,
+    receiverId: String,
   },
   {
     timestamps: true,

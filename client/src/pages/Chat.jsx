@@ -8,6 +8,7 @@ import CustomSkeleton from "../components/skeletons/CustomSkeleton";
 
 import ChatBoxSkeleton from "../components/skeletons/ChatBoxSkeleton";
 import SettingModal from "../components/modal/SettingModal";
+import ActionModal from "../components/modal/ActionModal";
 const Chat = () => {
   const {
     chats,
@@ -16,6 +17,10 @@ const Chat = () => {
     updateCurrentChat,
     currentChat,
     isModalOpen,
+    deleteChat,
+    setIsActionModalOpen,
+    isActionModalOpen,
+    chatToDelete,
   } = useContext(ChatsContext);
   const dropDownRef = useRef(null);
   const { user } = useContext(AuthContext);
@@ -43,6 +48,13 @@ const Chat = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  const deleteChatz = () => {
+    deleteChat(chatToDelete);
+  };
+  const handleCancel = () => {
+    setIsActionModalOpen(false);
+  };
   return (
     <div className=" ">
       <PotentialChats />
@@ -73,6 +85,7 @@ const Chat = () => {
                         dropDownRef={dropDownRef}
                         user={user}
                         index={index}
+                        setOpenChatIndices={setOpenChatIndices}
                         toggleChatDropDown={toggleChatDropDown}
                         openChatIndices={openChatIndices}
                       />
@@ -101,6 +114,13 @@ const Chat = () => {
         isModalOpen={isModalOpen}
         headerText={"Edit Name"}
         user={user}
+      />
+      <ActionModal
+        isActionModalOpen={isActionModalOpen}
+        header={"Delete chats?"}
+        buttonText={"Delete"}
+        onCancel={handleCancel}
+        onAgree={deleteChatz}
       />
     </div>
   );

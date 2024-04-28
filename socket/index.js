@@ -5,8 +5,6 @@ const io = new Server({
 });
 let onlineUsers = [];
 io.on("connection", (socket) => {
-  console.log("socket", socket.id);
-
   socket.on("addNewUser", (userId) => {
     if (userId === null) return;
     !onlineUsers.some((user) => user.userId === userId) &&
@@ -14,7 +12,7 @@ io.on("connection", (socket) => {
         userId,
         socketId: socket.id,
       });
-    console.log("onlineUsers", onlineUsers);
+
     io.emit("getOnlineUsers", onlineUsers);
   });
   socket.on("sendMessage", (message) => {

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, postFileRequest, postRequest } from "../utils/services";

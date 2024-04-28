@@ -1,14 +1,24 @@
 import { useContext, useEffect, useRef } from "react";
 
 import { ChatsContext } from "../../contexts/ChatsContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 /* eslint-disable react/prop-types */
 const SettingModal = ({ isModalOpen, headerText }) => {
-  const { changedName, setChangedName, setIsModalOpen, modalMenuItemRef } =
-    useContext(ChatsContext);
+  const {
+    changedName,
+    setChangedName,
+    setIsModalOpen,
+    modalMenuItemRef,
+    handleNameUpdate,
+    isNameChangeLoading,
+    isNameChangeError,
+  } = useContext(ChatsContext);
+  const { user } = useContext(AuthContext);
   //const [name, setName] = useState(changedName);
+  const inputRef = useRef(null);
   useEffect(() => {
-    //setName(changedName);
+    inputRef.current.focus();
   }, [isModalOpen]);
   const settingsModalRef = useRef(null);
   useEffect(() => {
@@ -29,11 +39,18 @@ const SettingModal = ({ isModalOpen, headerText }) => {
     };
   }, []);
   return (
-    <div ref={settingsModalRef}>
+    <div
+      className={`${
+        isModalOpen ? "visible opacity-100  " : "invisible opacity-0 "
+      } flex justify-center items-center absolute top-0 left-0 right-0 bottom-0 bg-gray-700/50 z-[100] `}
+    >
       <div
+        ref={settingsModalRef}
         className={`${
-          isModalOpen ? "visible opacity-100 " : "invisible opacity-0 "
-        }w-[400px] h-[170px] bg-white text-gray-600 absolute top-[50%] bottom-0 left-[50%] right-0  -translate-y-2/4 -translate-x-2/4 rounded-md  shadow-2xl`}
+          isModalOpen
+            ? "visible opacity-100 translate-y-0 transition duration-300 ease-in "
+            : "invisible opacity-0 -translate-y-5 transition duration-300 ease-out"
+        } transition-all ease-in duration-70 w-[400px] h-[170px] bg-white text-gray-600  rounded-md z-50   shadow-2xl`}
       >
         <p className="text-center text-xl mt-2 font-bold">{headerText}</p>
         <div className="w-full h-8 flex justify-center items-center mt-9 ">
@@ -42,6 +59,7 @@ const SettingModal = ({ isModalOpen, headerText }) => {
             type="text"
             name="name"
             id="name"
+            ref={inputRef}
             onChange={(e) => {
               setChangedName(e.target.value);
               //setName(e.target.value);
@@ -51,11 +69,17 @@ const SettingModal = ({ isModalOpen, headerText }) => {
         </div>
         <div className="flex justify-center items-center pt-4">
           <button
+            onClick={() => handleNameUpdate(changedName, user?._id)}
             className="bg-blue-600 p-[4px] text-white rounded-md cursor-pointer font-bold text-sm"
             type="button"
           >
-            Update
+            {isNameChangeLoading ? "Updating..." : "Update"}
           </button>
+          {isNameChangeError && (
+            <p className="flex justify-center items-center text-red-400">
+              {isNameChangeError.message}
+            </p>
+          )}
         </div>
       </div>
     </div>

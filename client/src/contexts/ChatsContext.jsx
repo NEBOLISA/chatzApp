@@ -9,6 +9,8 @@ import {
   useState,
 } from "react";
 import { io } from "socket.io-client";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   baseUrl,
   deleteRequest,
@@ -17,12 +19,12 @@ import {
   putRequest,
 } from "../utils/services";
 import { AuthContext } from "./AuthContext";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 export const ChatsContext = createContext();
 
 export const ChatsContextProvider = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const [chatsError, setChatsError] = useState(null);
   const [isChatsLoading, setIsChatsLoading] = useState(false);
   const [chats, setChats] = useState(null);
@@ -34,6 +36,8 @@ export const ChatsContextProvider = ({ children }) => {
   const [messagesError, setMessagesError] = useState(null);
   const [sendTextMessageError, setSendTextMessageError] = useState(null);
   const [newMessage, setNewMessage] = useState(null);
+  const [newChat, setNewChat] = useState(null);
+
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [notifications, setNotifications] = useState([]);
@@ -43,9 +47,15 @@ export const ChatsContextProvider = ({ children }) => {
   const [profilePic, setProfilePic] = useState(null);
   const [profilePictures, setProfilePictures] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isActionModalOpen, setIsActionModalOpen] = useState(false);
   const [changedName, setChangedName] = useState(null);
   const [deleteResponse, setDeleteResponse] = useState(null);
   const [deleteErrorResponse, setDeleteErrorResponse] = useState(null);
+  const [chatToDelete, setChatToDelete] = useState(null);
+  const [isNameChangeLoading, setIsNameChangeLoading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+  const [isNameChangeError, setIsNameChangeError] = useState("");
   const modalMenuItemRef = useRef(null);
   useEffect(() => {
     const newSocket = io("http://localhost:3000");
@@ -71,21 +81,68 @@ export const ChatsContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (socket === null) return;
-    // const chat = chats.find((chat) => chat?._id === newMessage?.chatId);
 
     const recipientId = currentChat?.members.find((id) => id !== user?._id);
 
-    socket.emit("sendMessage", { ...newMessage, recipientId });
+    socket.emit("sendMessage", { ...newMessage, recipientId, newChat });
+    //console.log(chats);
   }, [newMessage]);
-
-  // receive message
 
   useEffect(() => {
     if (socket === null) return;
 
     socket.on("getMessage", (res) => {
-      if (currentChat?._id !== res.chatId) return;
+      // if (currentChat?._id !== res.chatId) return;
+
       setMessages((prev) => [...prev, res]);
+
+      const isChatCreated = chats.find(
+        (chat) =>
+          (chat?.members[0] === res.receiverId &&
+            chat?.members[1] === res.senderId) ||
+          (chat?.members[0] === res.senderId &&
+            chat?.members[1] === res.receiverId)
+      );
+      if (isChatCreated) {
+        return;
+      } else {
+        setChats((prev) => [...prev, res.newChat]);
+      }
+      //setChats((prev) => [...prev, ...res.chats]);
+      // if (isChatCreated) {
+      //   sendMessage(
+      //     res.text,
+      //     res.receiverId,
+      //     res.chatId,
+      //     undefined,
+      //     res.senderId,
+      //     false
+      //   );
+      //   return;
+      // } else {
+      //   createChat(res.receiverId, res.senderId);
+
+      //   sendMessage(
+      //     res.text,
+      //     res.receiverId,
+      //     // isChatCreated?._id,
+      //     res.chatId,
+      //     undefined,
+      //     res.senderId,
+      //     false
+      //   );
+      // }
+      //console.log(res);
+      // const isChatCreated = chats.find(
+      //   (chat) =>
+      //     chat?.members[0] === res.receiverId &&
+      //     chat?.members[1] === res.senderId
+      // );
+      // if (isChatCreated) {
+      //   return;
+      // } else {
+      //   createChat(res.receiverId, res.senderId);
+      // }
     });
     socket.on("getNotification", (res) => {
       const isChatOpen = currentChat?.members.some(
@@ -97,27 +154,54 @@ export const ChatsContextProvider = ({ children }) => {
       } else {
         setNotifications((prev) => [res, ...prev]);
       }
-      const isChatCreated = chats.find(
-        (chat) =>
-          (chat?.members[0] === res.receiverId &&
-            chat?.members[1] === res.senderId) ||
-          (chat?.members[0] === res.senderId &&
-            chat?.members[1] === res.receiverId)
-      );
-
-      if (isChatCreated) {
-        return;
-      } else {
-        createChat(res.senderId, res.receiverId);
-        //setCurrentChat(isChatCreated);
-        //updateCurrentChat(isChatCreated);
-      }
+      //  const isChatCreated = chats.find(
+      //    (chat) =>
+      //      chat?.members[0] === res.receiverId &&
+      //      chat?.members[1] === res.senderId
+      //  );
+      //   if (isChatCreated) {
+      //     return;
+      //   } else {
+      //     createChat(res.receiverId, res.senderId);
+      //   }
+      // if(chats){
+      //   return
+      // }else{
+      //   createChat()
+      // }
+      // const isChatCreated = chats.find(
+      //   (chat) =>
+      //     (chat?.members[0] === res.receiverId &&
+      //       chat?.members[1] === res.senderId) ||
+      //     (chat?.members[0] === res.senderId &&
+      //       chat?.members[1] === res.receiverId)
+      // );
+      // const isUserChatCreated = chats.find(
+      //   (chat) =>
+      //     chat?.members[0] === res.senderId &&
+      //     chat?.members[1] === res.receiverId
+      // );
+      // const isReceiverChatCreated = chats.find(
+      //   (chat) =>
+      //     chat?.members[0] === res.receiverId &&
+      //     chat?.members[1] === res.senderId
+      // );
+      // if (isUserChatCreated) {
+      //   return;
+      // } else {
+      //   createChat(res.senderId, res.receiverId);
+      // }
+      // if (isReceiverChatCreated) {
+      //   return;
+      // } else {
+      //   createChat(res.receiverId, res.senderId);
+      // }
     });
     return () => {
       socket.off("getMessage");
       socket.off("getNotification");
     };
-  }, [socket, currentChat, chats]);
+  }, [socket, currentChat, chats, messages]);
   // fetch notifications
   useEffect(() => {
     const getNotifications = async () => {
@@ -132,13 +216,14 @@ export const ChatsContextProvider = ({ children }) => {
     };
 
     getNotifications();
-  }, [user?._id]);
+  }, [user]);
 
   useEffect(() => {
     const getChats = async () => {
       setIsChatsLoading(true);
       setChatsError(null);
       const response = await getRequest(`${baseUrl}/chats/${user?._id}`);
+
       setIsChatsLoading(false);
       if (response.error) {
         return setChatsError(response.message);
@@ -158,17 +243,21 @@ export const ChatsContextProvider = ({ children }) => {
     const getMessages = async () => {
       setIsMessagesLoading(true);
       setMessagesError(null);
+
       const response = await getRequest(
-        `${baseUrl}/messages/${currentChat?._id}`
+        `${baseUrl}/messages/${currentChat?.members[0]}/${currentChat?.members[1]}/${user?._id}`
       );
+
       setIsMessagesLoading(false);
       if (response.error) {
         return setMessagesError(response.message);
       }
+
       setMessages(response);
     };
     getMessages();
   }, [currentChat]);
+
   const updateNotification = async (senderId) => {
     const response = await putRequest(
       `${baseUrl}/notifications`,
@@ -211,7 +300,7 @@ export const ChatsContextProvider = ({ children }) => {
         if (chats) {
           isChatCreated = chats?.some(
             (chat) =>
-              chat.members[0] === User?._id || chat.members[1] === User?._id
+              chat?.members[0] === User?._id || chat?.members[1] === User?._id
           );
         }
         return !isChatCreated;
@@ -248,13 +337,15 @@ export const ChatsContextProvider = ({ children }) => {
   const handleOpenModal = useCallback(() => {
     setIsModalOpen(!isModalOpen);
   }, [isModalOpen]);
+
   const sendMessage = useCallback(
     async (
       textMessage,
       senderId,
       currentChatId,
-      setTextMessage,
-      receiverId
+      setTextMessage = "",
+      receiverId,
+      isRead
     ) => {
       if (!textMessage) return console.log("You must type something...");
       const response = await postRequest(
@@ -263,14 +354,16 @@ export const ChatsContextProvider = ({ children }) => {
           chatId: currentChatId,
           senderId: senderId,
           text: textMessage,
+          receiverId,
         })
       );
+
       const response2 = await postRequest(
         `${baseUrl}/notifications`,
         JSON.stringify({
           senderId,
           receiverId,
-          isRead: false,
+          isRead,
         })
       );
       if (response.error) {
@@ -281,39 +374,76 @@ export const ChatsContextProvider = ({ children }) => {
       }
       setNewMessage(response);
       setMessages((prev) => [...prev, response]);
-      //setNotifications(response2)
+
       setTextMessage("");
     },
     []
   );
   //get user notification
-  const createChat = useCallback(async (firstId, secondId) => {
+  const createChat = useCallback(async (userId, recipientId) => {
     const response = await postRequest(
       `${baseUrl}/chats`,
       JSON.stringify({
-        firstId,
-        secondId,
+        userId,
+        recipientId,
       })
     );
     if (response.error) {
       return console.log("Error creating chat", response);
     }
+    setNewChat(response);
     setChats((prev) => [...prev, response]);
   }, []);
-  const deleteChat = useCallback(
-    async (chatId) => {
-      const response = await deleteRequest(`${baseUrl}/chats/${chatId}`);
 
+  const deleteChat = useCallback(
+    async (chat) => {
+      setIsDeleteLoading(true);
+
+      const response = await putRequest(
+        `${baseUrl}/chats/${user?._id}/${chat?._id}`
+      );
+      if (response.status === 200) {
+        setIsDeleteLoading(false);
+        toast.success("Chat successfully deleted", { autoClose: 1000 });
+      }
+      setIsActionModalOpen(false);
       if (response?.error) {
-        return toast.error(response.message);
+        setIsDeleteLoading(false);
+        toast.error("Error deleting chat, try again", { autoClose: 1000 });
+        setIsActionModalOpen(false);
+        return console.error(response.message);
       }
 
-      const mChats = chats?.filter((chat) => chat?._id !== chatId);
+      const mChats = chats?.filter((chat) => chat?._id !== chat?._id);
 
       setChats([...mChats]);
     },
     [chats]
   );
+  const handleNameUpdate = useCallback(async (name, userId) => {
+    setIsNameChangeLoading(true);
+
+    const response = await putRequest(
+      `${baseUrl}/users`,
+      JSON.stringify({
+        changedName: name,
+        userId,
+      })
+    );
+    if (response.status === 200) {
+      toast.success("Name successfully updated", { autoClose: 1000 });
+      setIsNameChangeLoading(false);
+      setUser(response.data);
+      localStorage.setItem("user", JSON.stringify(response));
+      setIsModalOpen(false);
+    }
+    if (response.error) {
+      setIsNameChangeLoading(false);
+      toast.error("Error changing name, try again", { autoClose: 1000 });
+      setIsModalOpen(false);
+      return setIsNameChangeError(response);
+    }
+  }, []);
   return (
     <ChatsContext.Provider
       value={{
@@ -351,6 +481,15 @@ export const ChatsContextProvider = ({ children }) => {
         deleteChat,
         deleteResponse,
         deleteErrorResponse,
+
+        setIsActionModalOpen,
+        isActionModalOpen,
+        chatToDelete,
+        setChatToDelete,
+        isNameChangeLoading,
+        isNameChangeError,
+        handleNameUpdate,
+        isDeleteLoading,
       }}
     >
       {children}

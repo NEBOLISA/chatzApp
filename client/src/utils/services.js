@@ -71,7 +71,7 @@ export const getRequest = async (url) => {
   }
   return data;
 };
-export const putRequest = async (url, body) => {
+export const putRequest = async (url, body = "") => {
   const response = await fetch(url, {
     method: "PUT",
     headers: {
@@ -107,7 +107,7 @@ export const deleteRequest = async (url) => {
       message = data.message;
       toast.error("Error deleting chat, try again", { autoClose: 1000 });
     } else {
-      toast.error("Cannot delete");
+      toast.error("Cannot delete", { autoClose: 1000 });
       message = JSON.stringify(data); //"Network error";
     }
 

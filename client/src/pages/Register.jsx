@@ -50,9 +50,12 @@ const Register = () => {
   };
   return (
     <>
-      <form className=" pt-[10%] w-[80%] mx-auto" onSubmit={handleSubmit}>
-        <div className="w-[60%] mx-auto">
-          <h2 className="text-xl mb-6">Register</h2>
+      <form
+        className=" pt-[10%] flex justify-center items-center h-[80vh] w-[80%] mx-auto"
+        onSubmit={handleSubmit}
+      >
+        <div className="xsm:w-[80%] lg:w-[60%] mx-auto">
+          <h2 className="text-xl mb-6 text-black">Register</h2>
           <div className="mb-3">
             <input
               className=" focus:outline-none border focus:border-indigo-500 text-black w-full rounded-sm p-1"

@@ -9,6 +9,9 @@ import CustomSkeleton from "../components/skeletons/CustomSkeleton";
 import ChatBoxSkeleton from "../components/skeletons/ChatBoxSkeleton";
 import SettingModal from "../components/modal/SettingModal";
 import ActionModal from "../components/modal/ActionModal";
+import FooterMenu from "../components/FooterMenu";
+import SideMenu from "../components/SideMenu";
+
 const Chat = () => {
   const {
     chats,
@@ -21,10 +24,15 @@ const Chat = () => {
     setIsActionModalOpen,
     isActionModalOpen,
     chatToDelete,
+    setCurrentChat,
+    profilePic,
+    isSideMenuOpen,
+    setIsSideMenuOpen,
   } = useContext(ChatsContext);
   const dropDownRef = useRef(null);
   const { user } = useContext(AuthContext);
   const [openChatIndices, setOpenChatIndices] = useState([]);
+  const [isActive, setActive] = useState("chats");
   useEffect(() => {
     setOpenChatIndices(Array(chats?.length).fill(false));
   }, [chats]);
@@ -55,18 +63,30 @@ const Chat = () => {
   const handleCancel = () => {
     setIsActionModalOpen(false);
   };
+  const handleBackToChats = () => {
+    setCurrentChat(null);
+  };
   return (
-    <div className=" ">
-      <PotentialChats />
+    <div className="">
+      <PotentialChats isActive={isActive} />
 
+      <FooterMenu isActive={isActive} setActive={setActive} />
       {chats?.length === 0 ? (
         <p className="text-center w-[100%]  text-gray-400 font-bold text-2xl flex items-center justify-center">
           No chats yet
         </p>
       ) : (
-        <div className="flex gap-12      mb-5  container">
-          <div className="bg-white h-[70vh]">
-            <div className="flex-[50%] border-x-[.2px] w-[450px] h-full  flex-grow  overflow-y-auto ">
+        <div className=" sm:block  lg:flex gap-12   lg:mb-5 b  ">
+          <div
+            className={`sm:${
+              isActive === "chats" && currentChat === null
+                ? "block w-full"
+                : "hidden"
+            } bg-white  sm:h-[78vh] lg:h-[70vh] lg:block  flex-[50%]`}
+          >
+            <div
+              className={` border-x-[.2px]  h-full  flex-grow  overflow-y-auto`}
+            >
               {isChatsLoading && (
                 <div className="w-max">
                   <CustomSkeleton size={6} />
@@ -95,13 +115,21 @@ const Chat = () => {
             </div>
           </div>
 
-          <div className="flex-[60%]   ">
+          <div className={` flex-[60%]  lg:flex`}>
             {isChatsLoading ? (
               <ChatBoxSkeleton count={5} />
             ) : currentChat !== null ? (
-              <ChatBox />
+              <div
+                className={`sm:${
+                  currentChat !== null
+                    ? "absolute left-0 right-0 top-16 bottom-0 block"
+                    : " absolute left-0 right-0 top-16 bottom-0 hidden"
+                } flex-[60%]  lg:flex`}
+              >
+                <ChatBox handleBackToChats={handleBackToChats} />
+              </div>
             ) : (
-              <p className="text-center w-[100%] h-[70vh] text-gray-400 font-bold text-2xl flex items-center justify-center">
+              <p className=" sm:hidden lg:flex text-center w-[100%] h-[70vh] text-gray-400 font-bold text-2xl  items-center justify-center">
                 No conversations yet
               </p>
             )}
@@ -121,6 +149,13 @@ const Chat = () => {
         buttonText={"Delete"}
         onCancel={handleCancel}
         onAgree={deleteChatz}
+      />
+
+      <SideMenu
+        setIsSideMenuOpen={setIsSideMenuOpen}
+        isSideMenuOpen={isSideMenuOpen}
+        userName={user}
+        profile={profilePic}
       />
     </div>
   );

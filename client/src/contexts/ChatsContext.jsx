@@ -56,7 +56,9 @@ export const ChatsContextProvider = ({ children }) => {
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   const [isNameChangeError, setIsNameChangeError] = useState("");
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const modalMenuItemRef = useRef(null);
+  const respModalMenuItemRef = useRef(null);
   useEffect(() => {
     const newSocket = io("http://localhost:3000");
     setSocket(newSocket);
@@ -335,7 +337,7 @@ export const ChatsContextProvider = ({ children }) => {
     getProfilePic();
   }, [user, potentialChats]);
   const handleOpenModal = useCallback(() => {
-    setIsModalOpen(!isModalOpen);
+    setIsModalOpen(true);
   }, [isModalOpen]);
 
   const sendMessage = useCallback(
@@ -405,6 +407,13 @@ export const ChatsContextProvider = ({ children }) => {
       if (response.status === 200) {
         setIsDeleteLoading(false);
         toast.success("Chat successfully deleted", { autoClose: 1000 });
+        console.log(chats);
+        const mChats = chats?.filter(
+          (singlechat) => singlechat?._id !== chat?._id
+        );
+        console.log(mChats);
+
+        setChats([...mChats]);
       }
       setIsActionModalOpen(false);
       if (response?.error) {
@@ -413,10 +422,6 @@ export const ChatsContextProvider = ({ children }) => {
         setIsActionModalOpen(false);
         return console.error(response.message);
       }
-
-      const mChats = chats?.filter((chat) => chat?._id !== chat?._id);
-
-      setChats([...mChats]);
     },
     [chats]
   );
@@ -444,6 +449,17 @@ export const ChatsContextProvider = ({ children }) => {
       return setIsNameChangeError(response);
     }
   }, []);
+  const handleMenuToggle = () => {
+    setIsSideMenuOpen(!isSideMenuOpen);
+  };
+  const logout = () => {
+    localStorage.removeItem("user");
+
+    setUser(null);
+    setChats(null);
+    setCurrentChat(null);
+    setPotentialChats(null);
+  };
   return (
     <ChatsContext.Provider
       value={{
@@ -490,6 +506,11 @@ export const ChatsContextProvider = ({ children }) => {
         isNameChangeError,
         handleNameUpdate,
         isDeleteLoading,
+        isSideMenuOpen,
+        setIsSideMenuOpen,
+        handleMenuToggle,
+        logout,
+        respModalMenuItemRef,
       }}
     >
       {children}

@@ -99,7 +99,7 @@ const Notification = () => {
           isOpen
             ? "visible opacity-100 translate-y-0 transition duration-300 ease-in"
             : "invisible opacity-0 -translate-y-5 transition duration-300 ease-out "
-        }transition-all  before:content-[''] before:-z-10 before:absolute before:-top-0 before:left-[60px] before:h-5 before:w-6 before:bg-white before:rotate-45 z-20 ease-in duration-70 bg-white text-gray-700 shadow-2xl w-[300px] absolute pb-2 top-12 right-44 rounded-xl`}
+        }transition-all  before:content-[''] before:-z-10 before:absolute before:-top-0 before:right-[60px] before:h-5 before:w-6 before:bg-white before:rotate-45 z-20 ease-in duration-70 bg-white text-gray-700 shadow-2xl w-[300px] absolute pb-2 top-12 sm:right-1 lg:right-44 rounded-xl`}
       >
         <div className="flex justify-between items-center p-3 ">
           <h3 className="text-lg font-semibold">Notifications</h3>

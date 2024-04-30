@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ChatBox from "./components/chat/ChatBox";
 function App() {
   const { user } = useContext(AuthContext);
   return (
@@ -15,7 +16,7 @@ function App() {
         <ToastContainer />
         <Navbar />
 
-        <div className="mx-auto w-3/4    ">
+        <div className="mx-auto   sm:w-[100%] lg:w-[95%] xl:w-3/4  w-3/4  ">
           <Routes>
             <Route path="/" element={user ? <Chat /> : <Login />}></Route>
             <Route path="/login" element={user ? <Chat /> : <Login />}></Route>
@@ -24,6 +25,7 @@ function App() {
               element={user ? <Chat /> : <Register />}
             ></Route>
             <Route path="/*" element={<Navigate to="/" />}></Route>
+            <Route path="/chatbox" element={user && <ChatBox />}></Route>
           </Routes>
         </div>
       </div>

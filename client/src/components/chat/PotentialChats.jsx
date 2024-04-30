@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useContext } from "react";
 import { ChatsContext } from "../../contexts/ChatsContext";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -5,7 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import NoProfile from "../../assets/avater2.png";
-const PotentialChats = () => {
+const PotentialChats = ({ isActive }) => {
   const { user } = useContext(AuthContext);
   const {
     potentialChats,
@@ -32,17 +33,24 @@ const PotentialChats = () => {
       </div>
     );
   return (
-    <div className="flex gap-3 pt-3 bg-[white] w-full items-center px-2 mb-5 cursor-pointer mt-[20px]">
-      <div className="flex gap-3  h-[100px]  overflow-x-scroll w-max px-2  cursor-pointer">
+    <div
+      className={`sm:${
+        isActive === "potentialChats" ? "flex " : "hidden"
+      }  lg:flex sm:pt-0 gap-3 pt-3 h-full bg-[white] w-full lg:items-center lg:px-2 mb-5 cursor-pointer `}
+    >
+      <div
+        className="sm:flex sm:flex-col
+       sm:w-full  sm:h-[75vh] sm:py-6 sm:gap-3   lg:flex-row lg:flex gap-3  lg:h-[100px]  overflow-x-scroll w-max px-2  cursor-pointer"
+      >
         {potentialChats?.length > 0 ? (
           potentialChats?.map((u, index) => (
             <div
               key={index}
-              className="flex bg-[#17adb0] w-full self-center rounded-md p-1 relative"
+              className="lg:mt-3 sm:self-start  sm:py-2 sm:flex sm:items-center sm:gap-2 flex  bg-[#17adb0] w-full self-center rounded-md p-1 relative"
               onClick={() => createChat(user._id, u?._id)}
             >
               <img
-                className=" w-[40px] h-[40px] rounded-full object-cover absolute -left-2 -top-8"
+                className=" w-[40px] h-[40px] sm:block rounded-full object-cover lg:absolute lg:-left-2 lg:-top-8"
                 src={
                   profilePictures.find((pic) => pic?.userId === u?._id)
                     ?.fileName

@@ -13,6 +13,7 @@ const SettingModal = ({ isModalOpen, headerText }) => {
     handleNameUpdate,
     isNameChangeLoading,
     isNameChangeError,
+    respModalMenuItemRef,
   } = useContext(ChatsContext);
   const { user } = useContext(AuthContext);
   //const [name, setName] = useState(changedName);
@@ -27,7 +28,8 @@ const SettingModal = ({ isModalOpen, headerText }) => {
         settingsModalRef.current &&
         !settingsModalRef.current.contains(event.target)
       ) {
-        modalMenuItemRef.current.contains(event.target)
+        modalMenuItemRef.current.contains(event.target) ||
+        respModalMenuItemRef.current.contains(event.target)
           ? setIsModalOpen(true)
           : setIsModalOpen(false);
       }

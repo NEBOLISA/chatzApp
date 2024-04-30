@@ -31,9 +31,12 @@ const Login = () => {
   };
   return (
     <>
-      <form onSubmit={handleLoginUser} className=" pt-[10%] w-[80%] mx-auto">
-        <div className="w-[60%] mx-auto">
-          <h2 className="text-xl mb-6">Login</h2>
+      <form
+        onSubmit={handleLoginUser}
+        className="flex justify-center items-center h-[80vh] pt-[10%] w-[80%] mx-auto"
+      >
+        <div className="xsm:w-[80%] lg:w-[60%] mx-auto">
+          <h2 className="text-xl mb-6 text-black">Login</h2>
 
           <div className="mb-3">
             <input

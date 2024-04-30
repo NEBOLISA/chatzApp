@@ -6,6 +6,7 @@ import { useFetchRecipient } from "../../hooks/useFetchRecipient";
 import { ChatsContext } from "../../contexts/ChatsContext";
 import moment from "moment";
 import { useFetchLastMessage } from "../../hooks/useFetchLastMessage";
+import { Navigate } from "react-router-dom";
 /* eslint-disable react/prop-types */
 const UserChat = ({
   chat,
@@ -15,6 +16,7 @@ const UserChat = ({
   openChatIndices,
   dropDownRef,
   setOpenChatIndices,
+  // handleNavigate
 }) => {
   const { recipientUser } = useFetchRecipient(chat, user);
   const {
@@ -58,11 +60,17 @@ const UserChat = ({
     );
     e.stopPropagation();
   };
+  // const handleNavigate = () => {
+  //   Navigate("/chatbox");
+  // };
   return (
-    <div className="flex justify-between cursor-pointer relative   border-b-[.3px]  border-[#AEAEAE] h-[70px] py-2 px-2 hover:bg-[#e4e4e4] group">
+    <div
+      // onClick={handleNavigate}
+      className=" flex justify-between cursor-pointer relative   border-b-[.3px]  border-[#AEAEAE] h-[70px] py-2 px-2 hover:bg-[#e4e4e4] group"
+    >
       {openChatIndices[index] === true && (
         <div
-          className="bg-white text-gray-600 z-30  w-[170px] 
+          className="bg-white  text-gray-600 z-30  w-[170px] 
       shadow-[-4px_-2px_14px_-2px_rgba(156,153,153,0.66)] absolute  top-6 right-2"
         >
           <ul>

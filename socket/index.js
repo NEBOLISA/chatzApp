@@ -1,5 +1,6 @@
 const { Server } = require("socket.io");
-
+require("dotenv").config();
+const port = process.env.PORT || 3000;
 const io = new Server({
   cors: "http://localhost:5173",
 });
@@ -33,4 +34,4 @@ io.on("connection", (socket) => {
     io.emit("getOnlineUsers", onlineUsers);
   });
 });
-io.listen(3000);
+io.listen(port);

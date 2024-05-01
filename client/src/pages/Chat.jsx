@@ -52,6 +52,7 @@ const Chat = () => {
       );
     }
   };
+
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
     return () => {

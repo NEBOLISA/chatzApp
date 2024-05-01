@@ -6,6 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import NoProfile from "../../assets/avater2.png";
+import { baseUrl } from "../../utils/services";
 const PotentialChats = ({ isActive }) => {
   const { user } = useContext(AuthContext);
   const {
@@ -54,7 +55,7 @@ const PotentialChats = ({ isActive }) => {
                 src={
                   profilePictures.find((pic) => pic?.userId === u?._id)
                     ?.fileName
-                    ? `http://localhost:5000/uploads/` +
+                    ? `${baseUrl}/uploads/` +
                       profilePictures.find((pic) => pic?.userId === u?._id)
                         ?.fileName
                     : NoProfile

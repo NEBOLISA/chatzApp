@@ -7,6 +7,7 @@ import { ChatsContext } from "../../contexts/ChatsContext";
 import moment from "moment";
 import { useFetchLastMessage } from "../../hooks/useFetchLastMessage";
 import { Navigate } from "react-router-dom";
+import { baseUrl } from "../../utils/services";
 /* eslint-disable react/prop-types */
 const UserChat = ({
   chat,
@@ -87,7 +88,7 @@ const UserChat = ({
             src={
               profilePictures.find((pic) => pic?.userId === recipientId)
                 ?.fileName
-                ? `http://localhost:5000/uploads/` +
+                ? `${baseUrl}/uploads/` +
                   profilePictures.find((pic) => pic?.userId === recipientId)
                     ?.fileName
                 : NoProfile

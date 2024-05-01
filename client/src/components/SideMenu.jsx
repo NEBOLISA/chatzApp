@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import NoProfile from "../assets/avatar.svg";
 import { useContext } from "react";
 import { ChatsContext } from "../contexts/ChatsContext";
+import { baseUrl } from "../utils/services";
 const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
   const {
     logout,
@@ -53,9 +54,7 @@ const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
           <img
             className="w-[100px] h-[100px] rounded-full object-cover"
             src={
-              profile
-                ? `http://localhost:5000/uploads/` + profile?.fileName
-                : NoProfile
+              profile ? `${baseUrl}/uploads/` + profile?.fileName : NoProfile
             }
             alt="profile"
           />

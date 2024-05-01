@@ -62,8 +62,10 @@ export const ChatsContextProvider = ({ children }) => {
   const modalMenuItemRef = useRef(null);
   const respModalChangePicItemRef = useRef(null);
   const respModalMenuItemRef = useRef(null);
+  const hambugerItemRef = useRef(null);
   useEffect(() => {
     const newSocket = io("https://chatzapp-2-socket.onrender.com");
+    // const newSocket = io("http://localhost:3000");
     setSocket(newSocket);
 
     return () => {
@@ -519,6 +521,7 @@ export const ChatsContextProvider = ({ children }) => {
         changePicItemRef,
         respModalChangePicItemRef,
         setProfilePic,
+        hambugerItemRef,
       }}
     >
       {children}

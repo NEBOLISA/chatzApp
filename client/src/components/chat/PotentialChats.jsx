@@ -6,7 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import NoProfile from "../../assets/avater2.png";
-import { baseUrl } from "../../utils/services";
+import { uploadUrl } from "../../utils/services";
 const PotentialChats = ({ isActive }) => {
   const { user } = useContext(AuthContext);
   const {
@@ -41,7 +41,7 @@ const PotentialChats = ({ isActive }) => {
     >
       <div
         className="sm:flex sm:flex-col
-       sm:w-full  sm:h-[75vh] sm:py-6 sm:gap-3   lg:flex-row lg:flex gap-3  lg:h-[100px]  overflow-x-scroll w-max px-2  cursor-pointer"
+       sm:w-full  md:h-[85vh] md:py-2 sm:h-[83vh] sm:py-6 sm:gap-3   lg:flex-row lg:flex gap-3  lg:h-[100px]  overflow-x-scroll w-max px-2 sm:pb-12  cursor-pointer"
       >
         {potentialChats?.length > 0 ? (
           potentialChats?.map((u, index) => (
@@ -55,7 +55,7 @@ const PotentialChats = ({ isActive }) => {
                 src={
                   profilePictures.find((pic) => pic?.userId === u?._id)
                     ?.fileName
-                    ? `${baseUrl}/uploads/` +
+                    ? `${uploadUrl}/uploads/` +
                       profilePictures.find((pic) => pic?.userId === u?._id)
                         ?.fileName
                     : NoProfile

@@ -39,7 +39,6 @@ const Register = () => {
       registerInfo.password.length > 0 &&
       registerInfo.email.length > 0
     ) {
-      console.log("am in here");
       setBtnDisabled(false);
     } else {
       setBtnDisabled(true);

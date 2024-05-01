@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import NoProfile from "../assets/avatar.svg";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { ChatsContext } from "../contexts/ChatsContext";
-import { baseUrl } from "../utils/services";
+import { uploadUrl } from "../utils/services";
 const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
   const {
     logout,
@@ -11,7 +11,9 @@ const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
     respModalMenuItemRef,
     setIsChangePicModalOpen,
     respModalChangePicItemRef,
+    hambugerItemRef,
   } = useContext(ChatsContext);
+  const sideMenuRef = useRef(null);
   const handleOpenModal = () => {
     setIsEditNameModalOpen(true);
     setIsSideMenuOpen(false);
@@ -20,6 +22,23 @@ const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
     setIsSideMenuOpen(false);
     setIsChangePicModalOpen(true);
   };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sideMenuRef.current && !sideMenuRef.current.contains(event.target)) {
+        setIsSideMenuOpen(false);
+
+        if (hambugerItemRef.current.contains(event.target)) {
+          setIsSideMenuOpen(true);
+        }
+        // setIsSideMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   return (
     <div
       className={`${
@@ -29,6 +48,7 @@ const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
       } lg:hidden absolute rounded-tl-lg rounded-bl-lg top-0 left-0 right-0 bottom-0 w-full h-[100vh] bg-slate-100/50 z-[100] `}
     >
       <div
+        ref={sideMenuRef}
         className={`${
           isSideMenuOpen
             ? "fixed visible opacity-100 -translate-x-0 transition duration-300 ease-in shadow-lg right-0 top-0 bottom-0 z-50  bg-white text-gray-500"
@@ -54,7 +74,7 @@ const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
           <img
             className="w-[100px] h-[100px] rounded-full object-cover"
             src={
-              profile ? `${baseUrl}/uploads/` + profile?.fileName : NoProfile
+              profile ? `${uploadUrl}/uploads/` + profile?.fileName : NoProfile
             }
             alt="profile"
           />

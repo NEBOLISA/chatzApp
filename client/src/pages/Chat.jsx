@@ -75,7 +75,11 @@ const Chat = () => {
 
       <FooterMenu isActive={isActive} setActive={setActive} />
       {chats?.length === 0 ? (
-        <p className="text-center w-[100%]  text-gray-400 font-bold text-2xl flex items-center justify-center">
+        <p
+          className={`sm:${
+            isActive === "chats" ? "block w-full" : "hidden"
+          } text-center w-[100%]  text-gray-400 font-bold text-2xl flex items-center justify-center`}
+        >
           No chats yet
         </p>
       ) : (

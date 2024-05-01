@@ -4,6 +4,9 @@ const port = process.env.PORT || 3000;
 const io = new Server({
   cors: "https://chatzapp-2.onrender.com/",
 });
+// const io = new Server({
+//   cors: "http://localhost:5173/",
+// });
 let onlineUsers = [];
 io.on("connection", (socket) => {
   socket.on("addNewUser", (userId) => {

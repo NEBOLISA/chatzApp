@@ -52,7 +52,7 @@ const EditNameModal = ({ isEditNameModalOpen, headerText }) => {
           isEditNameModalOpen
             ? "visible opacity-100 translate-y-0 transition duration-300 ease-in "
             : "invisible opacity-0 -translate-y-5 transition duration-300 ease-out"
-        } transition-all ease-in duration-70 w-[400px] h-[170px] bg-white text-gray-600  rounded-md z-50   shadow-2xl`}
+        } transition-all ease-in duration-70 xsm:w-[80%] md:w-[400px] h-[170px] bg-white text-gray-600  rounded-md z-50   shadow-2xl`}
       >
         <p className="text-center text-xl mt-2 font-bold">{headerText}</p>
         <div className="w-full h-8 flex justify-center items-center mt-9 ">

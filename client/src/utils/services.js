@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
 export const baseUrl = "https://chatzapp-1.onrender.com/api";
+export const uploadUrl = "https://chatzapp-1.onrender.com";
+// export const baseUrl = "http://localhost:5000/api";
+// export const uploadUrl = "http://localhost:5000";
+
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

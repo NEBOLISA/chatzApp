@@ -5,6 +5,7 @@ import { ChatsContext } from "../contexts/ChatsContext";
 import Notification from "./Notification";
 import NoProfile from "../assets/avatar.svg";
 import logo from "../assets/chatLogo2.png";
+import { uploadUrl } from "../utils/services";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
@@ -16,6 +17,7 @@ const Navbar = () => {
     setIsChangePicModalOpen,
     handleMenuToggle,
     changePicItemRef,
+    hambugerItemRef,
   } = useContext(ChatsContext);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -81,8 +83,7 @@ const Navbar = () => {
                         className="w-[30px] h-[30px] ml-3 rounded-full object-cover"
                         src={
                           profilePic
-                            ? `http://localhost:5000/uploads/` +
-                              profilePic?.fileName
+                            ? `${uploadUrl}/uploads/` + profilePic?.fileName
                             : NoProfile
                         }
                         alt="profile"
@@ -137,8 +138,9 @@ const Navbar = () => {
                 </div>
               </div>
               <div
+                ref={hambugerItemRef}
                 onClick={handleMenuToggle}
-                className="sm:block lg:hidden cursor-pointer"
+                className="sm:block lg:hidden cursor-pointer w-6 h-6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

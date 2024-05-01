@@ -3,8 +3,8 @@ const CustomSkeleton = ({ size }) => {
   let num = Array(size).fill(0);
 
   return num.map((_, i) => (
-    <div className=" w-[350px]  animate-pulse  my-6 " key={i}>
-      <div className="flex gap-3 w-[100%] ">
+    <div className=" w-[100%]  animate-pulse  my-6 " key={i}>
+      <div className="flex px-auto gap-3 w-[100%] ">
         <div className="animate-pulse">
           <img
             className="rounded-full object-cover w-[32px] h-[30px] "

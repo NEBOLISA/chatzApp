@@ -19,7 +19,7 @@ const PotentialChats = ({ isActive }) => {
 
   if (isChatsLoading)
     return (
-      <div className="flex mb-9 ">
+      <div className="lg:flex mb-9 sm:hidden ">
         <Skeleton
           count={4}
           style={{

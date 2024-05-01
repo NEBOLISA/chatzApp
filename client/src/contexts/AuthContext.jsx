@@ -33,11 +33,6 @@ export const AuthContextProvider = ({ children }) => {
   const handleFileChange = useCallback(
     (event) => {
       const file = event.target.files[0];
-
-      // console.log(user?._id);
-      // newFormData.append("image", file);
-      //   newFormData.append("userId", "123456");
-      // setFormData(newFormData);
       setSelectedFile(file);
       if (file) {
         const reader = new FileReader();

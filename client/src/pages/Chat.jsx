@@ -90,7 +90,7 @@ const Chat = () => {
               className={` border-x-[.2px]  h-full  flex-grow  overflow-y-auto`}
             >
               {isChatsLoading && (
-                <div className="w-max">
+                <div className="w-[90%] lg:[75vh] mx-auto">
                   <CustomSkeleton size={6} />
                 </div>
               )}
@@ -119,14 +119,18 @@ const Chat = () => {
 
           <div className={` flex-[60%]  lg:flex`}>
             {isChatsLoading ? (
-              <ChatBoxSkeleton count={5} />
+              <ChatBoxSkeleton
+                isActive={isActive}
+                currentChat={currentChat}
+                count={5}
+              />
             ) : currentChat !== null ? (
               <div
                 className={`sm:${
                   currentChat !== null
                     ? "absolute left-0 right-0 top-16 bottom-0 block"
                     : " absolute left-0 right-0 top-16 bottom-0 hidden"
-                } flex-[60%]  lg:flex`}
+                }  lg:flex-[60%]  lg:flex`}
               >
                 <ChatBox handleBackToChats={handleBackToChats} />
               </div>

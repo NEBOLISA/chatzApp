@@ -63,7 +63,7 @@ export const ChatsContextProvider = ({ children }) => {
   const respModalChangePicItemRef = useRef(null);
   const respModalMenuItemRef = useRef(null);
   useEffect(() => {
-    const newSocket = io("http://localhost:3000");
+    const newSocket = io("https://chatzapp-2-socket.onrender.com");
     setSocket(newSocket);
 
     return () => {

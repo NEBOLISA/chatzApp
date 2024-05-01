@@ -46,8 +46,8 @@ export const ChatsContextProvider = ({ children }) => {
   const [allUsers, setAllUsers] = useState([]);
   const [profilePic, setProfilePic] = useState(null);
   const [profilePictures, setProfilePictures] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isActionModalOpen, setIsActionModalOpen] = useState(false);
+  const [isEditNameModalOpen, setIsEditNameModalOpen] = useState(false);
+  const [isDeleteActionModalOpen, setIsDeleteActionModalOpen] = useState(false);
   const [changedName, setChangedName] = useState(null);
   const [deleteResponse, setDeleteResponse] = useState(null);
   const [deleteErrorResponse, setDeleteErrorResponse] = useState(null);
@@ -57,7 +57,10 @@ export const ChatsContextProvider = ({ children }) => {
 
   const [isNameChangeError, setIsNameChangeError] = useState("");
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+  const [isChangePicModalOpen, setIsChangePicModalOpen] = useState(false);
+  const changePicItemRef = useRef(null);
   const modalMenuItemRef = useRef(null);
+  const respModalChangePicItemRef = useRef(null);
   const respModalMenuItemRef = useRef(null);
   useEffect(() => {
     const newSocket = io("http://localhost:3000");
@@ -69,7 +72,7 @@ export const ChatsContextProvider = ({ children }) => {
   }, [user]);
   useEffect(() => {
     setChangedName(user?.name);
-  }, [isModalOpen]);
+  }, [isEditNameModalOpen]);
   useEffect(() => {
     if (socket === null) return;
     socket.emit("addNewUser", user?._id);
@@ -337,8 +340,8 @@ export const ChatsContextProvider = ({ children }) => {
     getProfilePic();
   }, [user, potentialChats]);
   const handleOpenModal = useCallback(() => {
-    setIsModalOpen(true);
-  }, [isModalOpen]);
+    setIsEditNameModalOpen(true);
+  }, [isEditNameModalOpen]);
 
   const sendMessage = useCallback(
     async (
@@ -415,11 +418,11 @@ export const ChatsContextProvider = ({ children }) => {
 
         setChats([...mChats]);
       }
-      setIsActionModalOpen(false);
+      setIsDeleteActionModalOpen(false);
       if (response?.error) {
         setIsDeleteLoading(false);
         toast.error("Error deleting chat, try again", { autoClose: 1000 });
-        setIsActionModalOpen(false);
+        setIsDeleteActionModalOpen(false);
         return console.error(response.message);
       }
     },
@@ -440,12 +443,12 @@ export const ChatsContextProvider = ({ children }) => {
       setIsNameChangeLoading(false);
       setUser(response.data);
       localStorage.setItem("user", JSON.stringify(response));
-      setIsModalOpen(false);
+      setIsEditNameModalOpen(false);
     }
     if (response.error) {
       setIsNameChangeLoading(false);
       toast.error("Error changing name, try again", { autoClose: 1000 });
-      setIsModalOpen(false);
+      setIsEditNameModalOpen(false);
       return setIsNameChangeError(response);
     }
   }, []);
@@ -489,8 +492,8 @@ export const ChatsContextProvider = ({ children }) => {
         profilePic,
         profilePictures,
         handleOpenModal,
-        isModalOpen,
-        setIsModalOpen,
+        isEditNameModalOpen,
+        setIsEditNameModalOpen,
         changedName,
         setChangedName,
         modalMenuItemRef,
@@ -498,8 +501,8 @@ export const ChatsContextProvider = ({ children }) => {
         deleteResponse,
         deleteErrorResponse,
 
-        setIsActionModalOpen,
-        isActionModalOpen,
+        setIsDeleteActionModalOpen,
+        isDeleteActionModalOpen,
         chatToDelete,
         setChatToDelete,
         isNameChangeLoading,
@@ -511,6 +514,11 @@ export const ChatsContextProvider = ({ children }) => {
         handleMenuToggle,
         logout,
         respModalMenuItemRef,
+        isChangePicModalOpen,
+        setIsChangePicModalOpen,
+        changePicItemRef,
+        respModalChangePicItemRef,
+        setProfilePic,
       }}
     >
       {children}

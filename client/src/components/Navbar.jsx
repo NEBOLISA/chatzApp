@@ -13,8 +13,9 @@ const Navbar = () => {
     profilePic,
     handleOpenModal,
     modalMenuItemRef,
-
+    setIsChangePicModalOpen,
     handleMenuToggle,
+    changePicItemRef,
   } = useContext(ChatsContext);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,7 +24,10 @@ const Navbar = () => {
   // useEffect(()=>{
   //   setStorageName(localStorage.get)
   // },[user])
-
+  const handlePicChange = () => {
+    setIsOpen(false);
+    setIsChangePicModalOpen(true);
+  };
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -115,7 +119,11 @@ const Navbar = () => {
                       >
                         Edit Name
                       </li>
-                      <li className="cursor-pointer transition-all ease-in duration-75 p-2 hover:bg-gray-200">
+                      <li
+                        ref={changePicItemRef}
+                        className="cursor-pointer transition-all ease-in duration-75 p-2 hover:bg-gray-200"
+                        onClick={handlePicChange}
+                      >
                         Change Profile Picture
                       </li>
                       <li

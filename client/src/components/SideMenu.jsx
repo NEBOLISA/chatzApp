@@ -4,11 +4,20 @@ import NoProfile from "../assets/avatar.svg";
 import { useContext } from "react";
 import { ChatsContext } from "../contexts/ChatsContext";
 const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
-  const { logout, setIsModalOpen, respModalMenuItemRef } =
-    useContext(ChatsContext);
+  const {
+    logout,
+    setIsEditNameModalOpen,
+    respModalMenuItemRef,
+    setIsChangePicModalOpen,
+    respModalChangePicItemRef,
+  } = useContext(ChatsContext);
   const handleOpenModal = () => {
-    setIsModalOpen(true);
+    setIsEditNameModalOpen(true);
     setIsSideMenuOpen(false);
+  };
+  const handlePicChange = () => {
+    setIsSideMenuOpen(false);
+    setIsChangePicModalOpen(true);
   };
   return (
     <div
@@ -80,7 +89,11 @@ const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
             </span>
             Edit Name
           </div>
-          <div className="p-2 cursor-pointer flex items-center gap-2 mb-1 hover:bg-slate-300">
+          <div
+            ref={respModalChangePicItemRef}
+            onClick={handlePicChange}
+            className="p-2 cursor-pointer flex items-center gap-2 mb-1 hover:bg-slate-300"
+          >
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -4,11 +4,11 @@ import { ChatsContext } from "../../contexts/ChatsContext";
 import { AuthContext } from "../../contexts/AuthContext";
 
 /* eslint-disable react/prop-types */
-const SettingModal = ({ isModalOpen, headerText }) => {
+const EditNameModal = ({ isEditNameModalOpen, headerText }) => {
   const {
     changedName,
     setChangedName,
-    setIsModalOpen,
+    setIsEditNameModalOpen,
     modalMenuItemRef,
     handleNameUpdate,
     isNameChangeLoading,
@@ -20,7 +20,7 @@ const SettingModal = ({ isModalOpen, headerText }) => {
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current.focus();
-  }, [isModalOpen]);
+  }, [isEditNameModalOpen]);
   const settingsModalRef = useRef(null);
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -30,8 +30,8 @@ const SettingModal = ({ isModalOpen, headerText }) => {
       ) {
         modalMenuItemRef.current.contains(event.target) ||
         respModalMenuItemRef.current.contains(event.target)
-          ? setIsModalOpen(true)
-          : setIsModalOpen(false);
+          ? setIsEditNameModalOpen(true)
+          : setIsEditNameModalOpen(false);
       }
     };
 
@@ -43,13 +43,13 @@ const SettingModal = ({ isModalOpen, headerText }) => {
   return (
     <div
       className={`${
-        isModalOpen ? "visible opacity-100  " : "invisible opacity-0 "
-      } flex justify-center items-center absolute top-0 left-0 right-0 bottom-0 bg-gray-700/50 z-[100] `}
+        isEditNameModalOpen ? "visible opacity-100  " : "invisible opacity-0 "
+      } flex justify-center h-[100vh] items-center absolute top-0 left-0 right-0 bottom-0 bg-gray-700/50 z-[100] `}
     >
       <div
         ref={settingsModalRef}
         className={`${
-          isModalOpen
+          isEditNameModalOpen
             ? "visible opacity-100 translate-y-0 transition duration-300 ease-in "
             : "invisible opacity-0 -translate-y-5 transition duration-300 ease-out"
         } transition-all ease-in duration-70 w-[400px] h-[170px] bg-white text-gray-600  rounded-md z-50   shadow-2xl`}
@@ -87,4 +87,4 @@ const SettingModal = ({ isModalOpen, headerText }) => {
     </div>
   );
 };
-export default SettingModal;
+export default EditNameModal;

@@ -8,6 +8,7 @@ import { AuthContext } from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ChatBox from "./components/chat/ChatBox";
+
 function App() {
   const { user } = useContext(AuthContext);
   return (

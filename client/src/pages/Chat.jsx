@@ -7,10 +7,12 @@ import ChatBox from "../components/chat/ChatBox";
 import CustomSkeleton from "../components/skeletons/CustomSkeleton";
 
 import ChatBoxSkeleton from "../components/skeletons/ChatBoxSkeleton";
-import SettingModal from "../components/modal/SettingModal";
-import ActionModal from "../components/modal/ActionModal";
+
 import FooterMenu from "../components/FooterMenu";
 import SideMenu from "../components/SideMenu";
+import EditNameModal from "../components/modal/EditNameModal";
+import DeleteActionModal from "../components/modal/DeleteActionModal";
+import ChangePicModal from "../components/modal/ChangePicModal";
 
 const Chat = () => {
   const {
@@ -19,10 +21,10 @@ const Chat = () => {
 
     updateCurrentChat,
     currentChat,
-    isModalOpen,
+    isEditNameModalOpen,
     deleteChat,
-    setIsActionModalOpen,
-    isActionModalOpen,
+    setIsDeleteActionModalOpen,
+    isDeleteActionModalOpen,
     chatToDelete,
     setCurrentChat,
     profilePic,
@@ -61,7 +63,7 @@ const Chat = () => {
     deleteChat(chatToDelete);
   };
   const handleCancel = () => {
-    setIsActionModalOpen(false);
+    setIsDeleteActionModalOpen(false);
   };
   const handleBackToChats = () => {
     setCurrentChat(null);
@@ -138,13 +140,13 @@ const Chat = () => {
         </div>
       )}
 
-      <SettingModal
-        isModalOpen={isModalOpen}
+      <EditNameModal
+        isEditNameModalOpen={isEditNameModalOpen}
         headerText={"Edit Name"}
         user={user}
       />
-      <ActionModal
-        isActionModalOpen={isActionModalOpen}
+      <DeleteActionModal
+        isDeleteActionModalOpen={isDeleteActionModalOpen}
         header={"Delete chats?"}
         buttonText={"Delete"}
         onCancel={handleCancel}
@@ -157,6 +159,7 @@ const Chat = () => {
         userName={user}
         profile={profilePic}
       />
+      <ChangePicModal />
     </div>
   );
 };

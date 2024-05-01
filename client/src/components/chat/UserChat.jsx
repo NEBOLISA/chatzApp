@@ -27,7 +27,7 @@ const UserChat = ({
     profilePictures,
 
     setChatToDelete,
-    setIsActionModalOpen,
+    setIsDeleteActionModalOpen,
   } = useContext(ChatsContext);
   const [NumOfUnreadNots, setNumOfUnreadNots] = useState(0);
 
@@ -54,7 +54,7 @@ const UserChat = ({
   };
   const handleDelete = (e, chatId) => {
     setChatToDelete(chatId);
-    setIsActionModalOpen(true);
+    setIsDeleteActionModalOpen(true);
     setOpenChatIndices((prevIndices) =>
       prevIndices.map((isOpen) => (isOpen === true ? false : false))
     );

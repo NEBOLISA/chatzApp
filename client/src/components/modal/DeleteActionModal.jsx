@@ -2,15 +2,16 @@ import { useContext, useEffect, useRef } from "react";
 import { ChatsContext } from "../../contexts/ChatsContext";
 
 /* eslint-disable react/prop-types */
-const ActionModal = ({
+const DeleteActionModal = ({
   header,
   buttonText,
-  isActionModalOpen,
+  isDeleteActionModalOpen,
   onCancel,
   onAgree,
 }) => {
   const deleteModalRef = useRef(null);
-  const { setIsActionModalOpen, isDeleteLoading } = useContext(ChatsContext);
+  const { setIsDeleteActionModalOpen, isDeleteLoading } =
+    useContext(ChatsContext);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -20,7 +21,7 @@ const ActionModal = ({
         // modalMenuItemRef.current.contains(event.target)
         // ? setIsModalOpen(true)
         //   :
-        setIsActionModalOpen(false);
+        setIsDeleteActionModalOpen(false);
       }
     };
 
@@ -32,13 +33,15 @@ const ActionModal = ({
   return (
     <div
       className={`${
-        isActionModalOpen ? "visible opacity-100 " : "invisible opacity-0 "
+        isDeleteActionModalOpen
+          ? "visible opacity-100 "
+          : "invisible opacity-0 "
       }absolute flex items-center justify-center top-0 left-0 right-0 bottom-0 bg-gray-700/50 z-10`}
     >
       <div
         ref={deleteModalRef}
         className={`${
-          isActionModalOpen
+          isDeleteActionModalOpen
             ? "visible opacity-100 translate-y-0 transition duration-300 ease-in "
             : "invisible opacity-0 -translate-y-5 transition duration-300 ease-out"
         } transition-all ease-in bg-white duration-70 w-[400px] h-[170px] p-3 rounded-md`}
@@ -62,4 +65,4 @@ const ActionModal = ({
     </div>
   );
 };
-export default ActionModal;
+export default DeleteActionModal;

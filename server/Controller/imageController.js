@@ -48,7 +48,9 @@ const updatePicture = async (req, res) => {
 
     if (imageDocument) {
       try {
-        fs.unlinkSync(imageDocument.filePath);
+        if (imageDocument.filePath) {
+          fs.unlinkSync(imageDocument.filePath);
+        }
       } catch (unlinkError) {
         console.error("Error deleting previous image file:", unlinkError);
         return res.status(500).json("Failed to delete previous image file");

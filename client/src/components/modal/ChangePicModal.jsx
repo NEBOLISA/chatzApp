@@ -21,6 +21,7 @@ const ChangePicModal = () => {
   const inputRef = useRef(null);
   const changePicRef = useRef(null);
   const formData = new FormData();
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -28,6 +29,8 @@ const ChangePicModal = () => {
         !changePicRef.current.contains(event.target)
       ) {
         setIsChangePicModalOpen(false);
+        setFile(null);
+        setImagePreview(null);
 
         if (
           changePicItemRef.current === event.target ||
@@ -101,6 +104,17 @@ const ChangePicModal = () => {
       }
     }
   };
+  const truncateText = (text) => {
+    if (text.length > 30) {
+      const extension = text.split(".");
+      const extLength = extension.length;
+      const ext =
+        extension.length > 1 ? extension[extLength - 1] : extension[0];
+      return text.slice(0, 30) + " ....." + `.${ext}`;
+    } else {
+      return text;
+    }
+  };
   return (
     <div
       className={`${
@@ -149,7 +163,7 @@ const ChangePicModal = () => {
             </div>
             <span className="text-gray-600">
               {" "}
-              {file ? file.name : "No file choosen"}
+              {file ? truncateText(file.name) : "No file choosen"}
             </span>
 
             <h1 className="md:text-2xl text-black sm:text-sm text-center">

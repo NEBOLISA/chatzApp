@@ -3,7 +3,7 @@
 /* eslint-disable react/prop-types */
 const FooterMenu = ({ isActive, setActive }) => {
   return (
-    <div className="h-[70px] sm:flex lg:hidden absolute left-0 right-0 -bottom-10 bg-white">
+    <div className="h-[70px] z-50 sm:flex lg:hidden absolute left-0 right-0 bottom-0 bg-white">
       <div className="flex justify-around w-[100%] items-center">
         <div
           onClick={() => setActive("chats")}

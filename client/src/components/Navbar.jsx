@@ -18,14 +18,12 @@ const Navbar = () => {
     handleMenuToggle,
     changePicItemRef,
     hambugerItemRef,
+    navUserName,
   } = useContext(ChatsContext);
   const [isOpen, setIsOpen] = useState(false);
 
   const settingsMenuRef = useRef(null);
-  // const [storageName,setStorageName] =useState(null)
-  // useEffect(()=>{
-  //   setStorageName(localStorage.get)
-  // },[user])
+
   const handlePicChange = () => {
     setIsOpen(false);
     setIsChangePicModalOpen(true);
@@ -51,7 +49,7 @@ const Navbar = () => {
   return (
     <div
       className=" bg-slate-700
-    h-14 mb-4 "
+    h-14 sm:mb-0 lg:mb-4 "
     >
       <div className="mx-auto h-full items-center sm:w-[95%] lg:[95%] w-3/4 flex justify-between">
         <div className=" flex text-2xl items-center justify-center">
@@ -64,7 +62,9 @@ const Navbar = () => {
         </div>
         {user && (
           <span className="xsm:hidden md:block text-green-500">
-            <span style={{ textTransform: "capitalize" }}>{user?.name}</span>
+            <span style={{ textTransform: "capitalize" }}>
+              {navUserName?.name || user?.name}
+            </span>
           </span>
         )}
         <ul className="flex items-center justify-center gap-4">

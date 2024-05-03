@@ -70,7 +70,7 @@ const Chat = () => {
     setCurrentChat(null);
   };
   return (
-    <div className="">
+    <div className="h-[100%] ">
       <PotentialChats isActive={isActive} />
 
       <FooterMenu isActive={isActive} setActive={setActive} />
@@ -83,13 +83,13 @@ const Chat = () => {
           No chats yet
         </p>
       ) : (
-        <div className=" sm:block  lg:flex gap-12   lg:mb-5 b  ">
+        <div className=" sm:h-[100%] lg:h-[70vh]  sm:flex sm:flex-col lg:flex-row  lg:flex gap-12   lg:mb-5 b  ">
           <div
             className={`sm:${
               isActive === "chats" && currentChat === null
-                ? "block w-full"
+                ? "flex w-full flex-1 "
                 : "hidden"
-            } bg-white  sm:h-[78vh] lg:h-[70vh] lg:block  flex-[50%]`}
+            } bg-white sm:h-[80.3dvh]  lg:h-[70vh] lg:block  lg:flex-[50%]`}
           >
             <div
               className={` border-x-[.2px]  h-full  flex-grow  overflow-y-auto`}
@@ -122,7 +122,7 @@ const Chat = () => {
             </div>
           </div>
 
-          <div className={` flex-[60%]  lg:flex`}>
+          <div className={` flex-[60%] overflow-y-hidden  lg:h-[70vh] lg:flex`}>
             {isChatsLoading ? (
               <ChatBoxSkeleton
                 isActive={isActive}
@@ -135,7 +135,7 @@ const Chat = () => {
                   currentChat !== null
                     ? "absolute left-0 right-0 top-16 bottom-0 block"
                     : " absolute left-0 right-0 top-16 bottom-0 hidden"
-                }  lg:flex-[60%]  lg:flex`}
+                }  lg:flex-[60%] sm:h-[100%] lg:h-[70vh]    lg:flex`}
               >
                 <ChatBox handleBackToChats={handleBackToChats} />
               </div>

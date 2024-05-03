@@ -49,8 +49,8 @@ const ChatBox = ({ handleBackToChats }) => {
   }
 
   return (
-    <div className="w-[100%] h-[89vh]   lg:h-[70vh] relative bg-[#cccdd5] rounded-lg    flex flex-col justify-between ">
-      <div className=" flex h-full overflow-y-hidden flex-col ">
+    <div className="w-[100%] sm:h-[100%]   lg:h-[100%] relative bg-[#cccdd5] rounded-lg    flex flex-col justify-between ">
+      <div className=" flex overflow-y-hidden flex-col ">
         <div className=" bg-[#e7e7e7] relative text-gray-600 text-center p-2 rounded-tl-lg rounded-tr-lg">
           <strong>
             {isMessagesLoading ? "Loading.." : recipientUser?.name}
@@ -119,10 +119,10 @@ const ChatBox = ({ handleBackToChats }) => {
           sendMessage(
             textMessage,
             user?._id,
-            currentChat?._id,
+            currentChat,
             setTextMessage,
             recipientId,
-            true
+            false
           );
         }}
         className="bg-[#e7e7e7]   p-2 flex gap-2 items-center  "

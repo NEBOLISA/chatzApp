@@ -32,7 +32,9 @@ const Notification = () => {
   const unReadNotif = notifications?.filter((not) => not?.isRead === false);
   const clearNotifications = () => {
     notifications.map((not) =>
-      not?.isRead === false ? updateNotification(not?.senderId) : ""
+      not?.isRead === false
+        ? updateNotification(not?.senderId, not?.receiverId)
+        : ""
     );
     const clearedNot = notifications?.map((not) =>
       not?.isRead === false ? { ...not, isRead: true } : { ...not }
@@ -41,14 +43,13 @@ const Notification = () => {
     setNotifications([...clearedNot]);
   };
   const openChat = (senderId, receiverId) => {
-    //console.log(senderId, receiverId);
     if (senderId && receiverId) {
       const chatToOpen = chats.find(
         (chat) =>
-          chat?.members[0] === senderId && chat?.members[1] === receiverId //||
-        //(chat?.members[0] === senderId && chat?.members[1] === receiverId)
+          (chat?.members[0] === senderId && chat?.members[1] === receiverId) ||
+          (chat?.members[0] === receiverId && chat?.members[1] === senderId)
       );
-      //console.log(chatToOpen);
+
       updateCurrentChat(chatToOpen);
     }
 

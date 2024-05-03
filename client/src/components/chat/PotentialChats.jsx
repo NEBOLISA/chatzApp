@@ -37,11 +37,11 @@ const PotentialChats = ({ isActive }) => {
     <div
       className={`sm:${
         isActive === "potentialChats" ? "flex " : "hidden"
-      }  lg:flex sm:pt-0 gap-3 pt-3 h-full bg-[white] w-full lg:items-center lg:px-2 mb-5 cursor-pointer `}
+      }  lg:flex overflow-y-hidden sm:pt-0 gap-3 pt-3 sm:h-[100dvh] lg:h-[100px] bg-[white] w-full lg:items-center lg:px-2 mb-5 cursor-pointer `}
     >
       <div
         className="sm:flex sm:flex-col
-       sm:w-full  md:h-[85vh] md:py-2 sm:h-[83vh] sm:py-6 sm:gap-3   lg:flex-row lg:flex gap-3  lg:h-[100px]  overflow-x-scroll w-max px-2 sm:pb-12  cursor-pointer"
+       sm:w-full  md:h-[85vh]  sm:h-[80.3dvh] sm:py-6 sm:gap-3   lg:flex-row lg:flex gap-3  lg:h-[100px]  overflow-x-scroll w-max px-2  cursor-pointer"
       >
         {potentialChats?.length > 0 ? (
           potentialChats?.map((u, index) => (

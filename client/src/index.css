@@ -8,8 +8,9 @@ body {
   /* rgb(40, 40, 40) */
   font-family: "Nunito", sans-serif;
   position: relative;
-
-  height: calc(100vh - 46px);
+  height: 100dvh;
+  overflow-y: hidden;
+  /* height: calc(100vh - 46px); */
 }
 .right {
   display: flex;

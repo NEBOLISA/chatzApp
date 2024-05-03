@@ -63,6 +63,7 @@ export const ChatsContextProvider = ({ children }) => {
   const respModalChangePicItemRef = useRef(null);
   const respModalMenuItemRef = useRef(null);
   const hambugerItemRef = useRef(null);
+  const [navUserName, setNavUserName] = useState(null);
   useEffect(() => {
     const newSocket = io("https://chatzapp-2-socket.onrender.com");
     // const newSocket = io("http://localhost:3000");
@@ -92,6 +93,7 @@ export const ChatsContextProvider = ({ children }) => {
     const recipientId = currentChat?.members.find((id) => id !== user?._id);
 
     socket.emit("sendMessage", { ...newMessage, recipientId, newChat });
+
     //console.log(chats);
   }, [newMessage]);
 
@@ -99,9 +101,8 @@ export const ChatsContextProvider = ({ children }) => {
     if (socket === null) return;
 
     socket.on("getMessage", (res) => {
-      // if (currentChat?._id !== res.chatId) return;
-
-      setMessages((prev) => [...prev, res]);
+      if (currentChat.members[1] === res.recipientId)
+        setMessages((prev) => [...prev, res]);
 
       const isChatCreated = chats.find(
         (chat) =>
@@ -113,43 +114,9 @@ export const ChatsContextProvider = ({ children }) => {
       if (isChatCreated) {
         return;
       } else {
-        setChats((prev) => [...prev, res.newChat]);
+        createChat(res.senderId, res.receiverId);
+        //setChats((prev) => [...prev, res.newChat]);
       }
-      //setChats((prev) => [...prev, ...res.chats]);
-      // if (isChatCreated) {
-      //   sendMessage(
-      //     res.text,
-      //     res.receiverId,
-      //     res.chatId,
-      //     undefined,
-      //     res.senderId,
-      //     false
-      //   );
-      //   return;
-      // } else {
-      //   createChat(res.receiverId, res.senderId);
-
-      //   sendMessage(
-      //     res.text,
-      //     res.receiverId,
-      //     // isChatCreated?._id,
-      //     res.chatId,
-      //     undefined,
-      //     res.senderId,
-      //     false
-      //   );
-      // }
-      //console.log(res);
-      // const isChatCreated = chats.find(
-      //   (chat) =>
-      //     chat?.members[0] === res.receiverId &&
-      //     chat?.members[1] === res.senderId
-      // );
-      // if (isChatCreated) {
-      //   return;
-      // } else {
-      //   createChat(res.receiverId, res.senderId);
-      // }
     });
     socket.on("getNotification", (res) => {
       const isChatOpen = currentChat?.members.some(
@@ -158,51 +125,10 @@ export const ChatsContextProvider = ({ children }) => {
 
       if (isChatOpen) {
         setNotifications((prev) => [{ ...res, isRead: true }, ...prev]);
+        //updateNotification(user?._id);
       } else {
         setNotifications((prev) => [res, ...prev]);
       }
-      //  const isChatCreated = chats.find(
-      //    (chat) =>
-      //      chat?.members[0] === res.receiverId &&
-      //      chat?.members[1] === res.senderId
-      //  );
-      //   if (isChatCreated) {
-      //     return;
-      //   } else {
-      //     createChat(res.receiverId, res.senderId);
-      //   }
-      // if(chats){
-      //   return
-      // }else{
-      //   createChat()
-      // }
-      // const isChatCreated = chats.find(
-      //   (chat) =>
-      //     (chat?.members[0] === res.receiverId &&
-      //       chat?.members[1] === res.senderId) ||
-      //     (chat?.members[0] === res.senderId &&
-      //       chat?.members[1] === res.receiverId)
-      // );
-      // const isUserChatCreated = chats.find(
-      //   (chat) =>
-      //     chat?.members[0] === res.senderId &&
-      //     chat?.members[1] === res.receiverId
-      // );
-      // const isReceiverChatCreated = chats.find(
-      //   (chat) =>
-      //     chat?.members[0] === res.receiverId &&
-      //     chat?.members[1] === res.senderId
-      // );
-      // if (isUserChatCreated) {
-      //   return;
-      // } else {
-      //   createChat(res.senderId, res.receiverId);
-      // }
-      // if (isReceiverChatCreated) {
-      //   return;
-      // } else {
-      //   createChat(res.receiverId, res.senderId);
-      // }
     });
     return () => {
       socket.off("getMessage");
@@ -265,11 +191,12 @@ export const ChatsContextProvider = ({ children }) => {
     getMessages();
   }, [currentChat]);
 
-  const updateNotification = async (senderId) => {
+  const updateNotification = async (senderId, receiverId) => {
     const response = await putRequest(
       `${baseUrl}/notifications`,
       JSON.stringify({
         senderId,
+        receiverId,
         isRead: true,
       })
     );
@@ -279,6 +206,7 @@ export const ChatsContextProvider = ({ children }) => {
   };
   useEffect(() => {
     const currentlyOpenId = currentChat?.members.find((id) => id !== user?._id);
+
     if (currentlyOpenId && notifications.length > 0) {
       if (notifications) {
         const newArray = notifications?.map((not) =>
@@ -289,9 +217,9 @@ export const ChatsContextProvider = ({ children }) => {
 
         messages?.length > 0 && setNotifications([...newArray]);
       }
-      updateNotification(currentlyOpenId);
+      updateNotification(currentlyOpenId, user?._id);
     }
-  }, [currentChat, messages]);
+  }, [currentChat]);
   useEffect(() => {
     const getPotentialUsers = async () => {
       const response = await getRequest(`${baseUrl}/users`);
@@ -349,7 +277,7 @@ export const ChatsContextProvider = ({ children }) => {
     async (
       textMessage,
       senderId,
-      currentChatId,
+      currentChat,
       setTextMessage = "",
       receiverId,
       isRead
@@ -358,7 +286,7 @@ export const ChatsContextProvider = ({ children }) => {
       const response = await postRequest(
         `${baseUrl}/messages`,
         JSON.stringify({
-          chatId: currentChatId,
+          chatId: currentChat?._id,
           senderId: senderId,
           text: textMessage,
           receiverId,
@@ -380,6 +308,7 @@ export const ChatsContextProvider = ({ children }) => {
         return setNotificationMessageError(response);
       }
       setNewMessage(response);
+      setNewChat(currentChat);
       setMessages((prev) => [...prev, response]);
 
       setTextMessage("");
@@ -398,8 +327,9 @@ export const ChatsContextProvider = ({ children }) => {
     if (response.error) {
       return console.log("Error creating chat", response);
     }
-    setNewChat(response);
+
     setChats((prev) => [...prev, response]);
+    console.log(response);
   }, []);
 
   const deleteChat = useCallback(
@@ -412,11 +342,10 @@ export const ChatsContextProvider = ({ children }) => {
       if (response.status === 200) {
         setIsDeleteLoading(false);
         toast.success("Chat successfully deleted", { autoClose: 1000 });
-        console.log(chats);
+
         const mChats = chats?.filter(
           (singlechat) => singlechat?._id !== chat?._id
         );
-        console.log(mChats);
 
         setChats([...mChats]);
       }
@@ -443,8 +372,9 @@ export const ChatsContextProvider = ({ children }) => {
     if (response.status === 200) {
       toast.success("Name successfully updated", { autoClose: 1000 });
       setIsNameChangeLoading(false);
-      setUser(response.data);
-      localStorage.setItem("user", JSON.stringify(response));
+      setNavUserName(response.data);
+
+      localStorage.setItem("user", JSON.stringify(response.data));
       setIsEditNameModalOpen(false);
     }
     if (response.error) {
@@ -522,6 +452,7 @@ export const ChatsContextProvider = ({ children }) => {
         respModalChangePicItemRef,
         setProfilePic,
         hambugerItemRef,
+        navUserName,
       }}
     >
       {children}

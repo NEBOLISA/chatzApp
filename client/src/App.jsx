@@ -13,11 +13,11 @@ function App() {
   const { user } = useContext(AuthContext);
   return (
     <BrowserRouter>
-      <div className="  ">
+      <div className="h-[90vh]  ">
         <ToastContainer />
         <Navbar />
 
-        <div className="mx-auto   sm:w-[100%] lg:w-[95%] xl:w-3/4  w-3/4  ">
+        <div className="mx-auto h-[100%]   sm:w-[100%] lg:w-[95%] xl:w-3/4  w-3/4  ">
           <Routes>
             <Route path="/" element={user ? <Chat /> : <Login />}></Route>
             <Route path="/login" element={user ? <Chat /> : <Login />}></Route>

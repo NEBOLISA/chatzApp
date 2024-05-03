@@ -27,7 +27,7 @@ export const useFetchLastMessage = (chat) => {
     if (chat) {
       getRecipient();
     }
-  }, [notifications, newMessage]);
+  }, [notifications, newMessage, messages]);
 
   return { latestMessage, error };
 };

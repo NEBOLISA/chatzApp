@@ -26,10 +26,11 @@ const getUserNotifications = async (req, res) => {
 };
 
 const updateNotification = async (req, res) => {
-  const { senderId, isRead } = req.body;
+  const { senderId, receiverId, isRead } = req.body;
   try {
     const singleUserNotifications = await notificationModel.find({
       senderId,
+      receiverId,
       isRead: false,
     });
     singleUserNotifications.map(async (notification) => {

@@ -8,9 +8,9 @@ const createChat = async (req, res) => {
       members: { $all: [userId, recipientId] },
     });
     if (existingChat) {
-      const isUserIdPresent = existingChat.deleteId.includes(userId);
+      const isUserIdPresent = existingChat.deleteId.includes(recipientId);
       if (!isUserIdPresent) {
-        existingChat.deleteId.push(userId);
+        existingChat.deleteId.push(recipientId);
         await existingChat.save();
       }
       return res.status(200).json(existingChat);

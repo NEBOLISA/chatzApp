@@ -169,6 +169,7 @@ export const ChatsContextProvider = ({ children }) => {
   }, [user]);
 
   const updateCurrentChat = (chat) => {
+    setMessages(null);
     setCurrentChat(chat);
   };
 

@@ -40,16 +40,16 @@ const ChatBox = ({ handleBackToChats }) => {
     );
   }
 
-  if (!recipientUser) {
-    return (
-      <p className="text-center text-gray-400 font-bold text-2xl w-[100%] h-[70vh] flex items-center justify-center">
-        No conversations yet
-      </p>
-    );
-  }
+  // if (!recipientUser) {
+  //   return (
+  //     <p className="text-center text-gray-400 font-bold text-2xl w-[100%] h-[70vh] flex items-center justify-center">
+  //       No conversations yet
+  //     </p>
+  //   );
+  // }
 
   return (
-    <div className="w-[100%] sm:h-[100%]   lg:h-[100%] relative bg-[#cccdd5] rounded-lg    flex flex-col justify-between ">
+    <div className="w-[100%] sm:h-[81vh]   lg:h-[100%] relative bg-[#cccdd5] rounded-lg    flex flex-col justify-between ">
       <div className=" flex overflow-y-hidden flex-col ">
         <div className=" bg-[#e7e7e7] relative text-gray-600 text-center p-2 rounded-tl-lg rounded-tr-lg">
           <strong>

@@ -15,3 +15,8 @@ body {
 .right {
   display: flex;
 }
+@media (max-width: 900px) {
+  .chatbox {
+    height: calc(100dvh - 126px);
+  }
+}

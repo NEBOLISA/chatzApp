@@ -135,7 +135,7 @@ const Chat = () => {
                   currentChat !== null
                     ? "absolute left-0 right-0 top-16 bottom-0 block"
                     : " absolute left-0 right-0 top-16 bottom-0 hidden"
-                }  lg:flex-[60%] sm:h-[100%] lg:h-[70vh]    lg:flex`}
+                }  lg:flex-[60%] sm:h-max lg:h-[70vh]    lg:flex`}
               >
                 <ChatBox handleBackToChats={handleBackToChats} />
               </div>

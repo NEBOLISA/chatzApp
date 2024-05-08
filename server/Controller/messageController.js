@@ -37,5 +37,7 @@ const getUserMessages = async (req, res) => {
     res.status(500).json(error);
   }
 };
+const deleteSingleMessage = async(req,res) =>{
 
+}
 module.exports = { createMessage, getUserMessages };

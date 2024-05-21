@@ -25,14 +25,16 @@ export const ChatsContext = createContext();
 
 export const ChatsContextProvider = ({ children }) => {
   const { user, setUser } = useContext(AuthContext);
+
   const [chatsError, setChatsError] = useState(null);
   const [isChatsLoading, setIsChatsLoading] = useState(false);
   const [chats, setChats] = useState(null);
   const [potentialChats, setPotentialChats] = useState([]);
+  const [potentialChatsLoading, setIsPotentialChatsLoading] = useState(false);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState(null);
   const [allMessages, setAllMessages] = useState(null);
-  const [isMessagesLoading, setIsMessagesLoading] = useState(null);
+  const [isMessagesLoading, setIsMessagesLoading] = useState(false);
   const [messagesError, setMessagesError] = useState(null);
   const [sendTextMessageError, setSendTextMessageError] = useState(null);
   const [newMessage, setNewMessage] = useState(null);
@@ -44,7 +46,7 @@ export const ChatsContextProvider = ({ children }) => {
   const [notificationMessageError, setNotificationMessageError] =
     useState(null);
   const [allUsers, setAllUsers] = useState([]);
-  const [profilePic, setProfilePic] = useState(null);
+  const [profilePic, setProfilePic] = useState(user?.profilePic);
   const [profilePictures, setProfilePictures] = useState([]);
   const [isEditNameModalOpen, setIsEditNameModalOpen] = useState(false);
   const [isDeleteActionModalOpen, setIsDeleteActionModalOpen] = useState(false);
@@ -64,6 +66,7 @@ export const ChatsContextProvider = ({ children }) => {
   const respModalMenuItemRef = useRef(null);
   const hambugerItemRef = useRef(null);
   const [navUserName, setNavUserName] = useState(null);
+  const [chatsUpdate, setIsChatsUpdate] = useState(false);
   useEffect(() => {
     const newSocket = io("https://chatzapp-2-socket.onrender.com");
     // const newSocket = io("http://localhost:3000");
@@ -101,7 +104,7 @@ export const ChatsContextProvider = ({ children }) => {
     if (socket === null) return;
 
     socket.on("getMessage", (res) => {
-      if (currentChat.members[1] === res.recipientId)
+      //if (currentChat?.members[1] === res.recipientId)
         setMessages((prev) => [...prev, res]);
 
       const isChatCreated = chats.find(
@@ -120,12 +123,12 @@ export const ChatsContextProvider = ({ children }) => {
     });
     socket.on("getNotification", (res) => {
       const isChatOpen = currentChat?.members.some(
-        (id) => id === res?.senderId
+        (id) => id === res?.senderId|| id=== res?.receiverId
       );
 
       if (isChatOpen) {
         setNotifications((prev) => [{ ...res, isRead: true }, ...prev]);
-        //updateNotification(user?._id);
+        updateNotification(res.senderId, res.receiverId);
       } else {
         setNotifications((prev) => [res, ...prev]);
       }
@@ -153,6 +156,7 @@ export const ChatsContextProvider = ({ children }) => {
 
   useEffect(() => {
     const getChats = async () => {
+      setProfilePic(user?.profilePic);
       setIsChatsLoading(true);
       setChatsError(null);
       const response = await getRequest(`${baseUrl}/chats/${user?._id}`);
@@ -171,6 +175,21 @@ export const ChatsContextProvider = ({ children }) => {
   const updateCurrentChat = (chat) => {
     setMessages(null);
     setCurrentChat(chat);
+
+    const mNot = notifications.map((not) => {
+      if (
+        (not.senderId === chat?.members[0] ||
+        not.senderId===chat?.members[1]) && (not.isRead === false)
+      ) {
+        return {
+          ...not,
+          isRead: true,
+        };
+      } else {
+        return not;
+      }
+    });
+    setNotifications(mNot);
   };
 
   useEffect(() => {
@@ -223,9 +242,15 @@ export const ChatsContextProvider = ({ children }) => {
   }, [currentChat]);
   useEffect(() => {
     const getPotentialUsers = async () => {
+      if (chatsUpdate) {
+        setIsPotentialChatsLoading(false);
+      } else {
+        setIsPotentialChatsLoading(true);
+      }
       const response = await getRequest(`${baseUrl}/users`);
 
       if (response.error) {
+        setIsPotentialChatsLoading(false);
         return console.log("Error fetching users", response);
       }
 
@@ -242,34 +267,35 @@ export const ChatsContextProvider = ({ children }) => {
         return !isChatCreated;
       });
       setAllUsers(response);
+      setIsPotentialChatsLoading(false);
       setPotentialChats(filteredUsers);
     };
 
     getPotentialUsers();
   }, [chats]);
-  useEffect(() => {
-    const getAllPics = async () => {
-      const response = await getRequest(`${baseUrl}/uploads/`);
-      if (response.error) {
-        return console.log("Error fetching pictures", response);
-      }
-      setProfilePictures(response);
-    };
-    getAllPics();
-  }, [potentialChats]);
+  // useEffect(() => {
+  //   const getAllPics = async () => {
+  //     const response = await getRequest(`${baseUrl}/uploads/`);
+  //     if (response.error) {
+  //       return console.log("Error fetching pictures", response);
+  //     }
+  //     setProfilePictures(response);
+  //   };
+  //   getAllPics();
+  // }, [potentialChats]);
 
-  useEffect(() => {
-    const getProfilePic = async () => {
-      const response = await getRequest(`${baseUrl}/uploads/${user?._id}`);
+  // useEffect(() => {
+  //   const getProfilePic = async () => {
+  //     const response = await getRequest(`${baseUrl}/uploads/${user?._id}`);
 
-      if (response?.error) {
-        return console.log("Error fetching users", response);
-      }
-      setProfilePic(response);
-    };
+  //     if (response?.error) {
+  //       return console.log("Error fetching users", response);
+  //     }
+  //     setProfilePic(response);
+  //   };
 
-    getProfilePic();
-  }, [user, potentialChats]);
+  //   getProfilePic();
+  // }, [user, potentialChats]);
   const handleOpenModal = useCallback(() => {
     setIsEditNameModalOpen(true);
   }, [isEditNameModalOpen]);
@@ -317,21 +343,29 @@ export const ChatsContextProvider = ({ children }) => {
     []
   );
   //get user notification
-  const createChat = useCallback(async (userId, recipientId) => {
-    const response = await postRequest(
-      `${baseUrl}/chats`,
-      JSON.stringify({
-        userId,
-        recipientId,
-      })
-    );
-    if (response.error) {
-      return console.log("Error creating chat", response);
-    }
+  const createChat = useCallback(
+    async (userId, recipientId) => {
+      const response = await postRequest(
+        `${baseUrl}/chats`,
+        JSON.stringify({
+          userId,
+          recipientId,
+        })
+      );
+      if (response.error) {
+        return console.log("Error creating chat", response);
+      }
 
-    setChats((prev) => [...prev, response]);
-    console.log(response);
-  }, []);
+      const filtPoteChats = potentialChats.filter(
+        (user) => user?._id !== response?.members[1]
+      );
+
+      setPotentialChats(filtPoteChats);
+      setChats((prev) => [...prev, response]);
+      setIsChatsUpdate(true);
+    },
+    [potentialChats]
+  );
 
   const deleteChat = useCallback(
     async (chat) => {
@@ -454,6 +488,7 @@ export const ChatsContextProvider = ({ children }) => {
         setProfilePic,
         hambugerItemRef,
         navUserName,
+        potentialChatsLoading,
       }}
     >
       {children}

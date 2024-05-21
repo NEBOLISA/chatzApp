@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import NoProfile from "../assets/avatar.svg";
 import { useContext, useEffect, useRef } from "react";
 import { ChatsContext } from "../contexts/ChatsContext";
-import { uploadUrl } from "../utils/services";
-const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
+const SideMenu = ({ isSideMenuOpen,  user, setIsSideMenuOpen }) => {
+ // const {user} = useContext(AuthContext)
   const {
     logout,
     setIsEditNameModalOpen,
@@ -12,6 +12,7 @@ const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
     setIsChangePicModalOpen,
     respModalChangePicItemRef,
     hambugerItemRef,
+    profilePic
   } = useContext(ChatsContext);
   const sideMenuRef = useRef(null);
   const handleOpenModal = () => {
@@ -73,12 +74,10 @@ const SideMenu = ({ isSideMenuOpen, profile, userName, setIsSideMenuOpen }) => {
         <div className=" flex flex-col justify-center items-center border-b-[.4px] pt-0 p-2 border-gray-400">
           <img
             className="w-[100px] h-[100px] rounded-full object-cover"
-            src={
-              profile ? `${uploadUrl}/uploads/` + profile?.fileName : NoProfile
-            }
+            src={profilePic ? profilePic : NoProfile}
             alt="profile"
           />
-          <p className=" text-black mt-2">{userName?.name}</p>
+          <p className=" text-black mt-2">{user?.name}</p>
         </div>
 
         <div className="">

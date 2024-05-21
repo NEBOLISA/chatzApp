@@ -26,8 +26,18 @@ const Register = () => {
       ...registerInfo,
       [name]: value,
     });
+    console.log(registerInfo)
   };
-
+ const truncateText = (text, textSize) => {
+   if (text.length > textSize) {
+     const extension = text.split(".");
+     const extLength = extension.length;
+     const ext = extension.length > 1 ? extension[extLength - 1] : extension[0];
+     return text.slice(0, textSize) + " ....." + `.${ext}`;
+   } else {
+     return text;
+   }
+ };
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -134,7 +144,7 @@ const Register = () => {
             </label>
             <span className="text-gray-600">
               {" "}
-              {selectedFile ? selectedFile.name : "No file choosen"}
+              {selectedFile ? truncateText(selectedFile.name,20) : "No file choosen"}
             </span>
           </div>
 

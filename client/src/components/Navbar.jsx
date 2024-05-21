@@ -5,13 +5,13 @@ import { ChatsContext } from "../contexts/ChatsContext";
 import Notification from "./Notification";
 import NoProfile from "../assets/avatar.svg";
 import logo from "../assets/chatLogo2.png";
-import { uploadUrl } from "../utils/services";
+
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
   const {
     logout,
-    profilePic,
+
     handleOpenModal,
     modalMenuItemRef,
     setIsChangePicModalOpen,
@@ -19,7 +19,10 @@ const Navbar = () => {
     changePicItemRef,
     hambugerItemRef,
     navUserName,
+    profilePic,
+  
   } = useContext(ChatsContext);
+   
   const [isOpen, setIsOpen] = useState(false);
 
   const settingsMenuRef = useRef(null);
@@ -82,9 +85,10 @@ const Navbar = () => {
                       <img
                         className="w-[30px] h-[30px] ml-3 rounded-full object-cover"
                         src={
-                          profilePic
-                            ? `${uploadUrl}/uploads/` + profilePic?.fileName
-                            : NoProfile
+                          profilePic? profilePic:NoProfile
+                          // profilePic
+                          //   ? `${uploadUrl}/uploads/` + profilePic?.fileName
+                          //   : NoProfile
                         }
                         alt="profile"
                       />

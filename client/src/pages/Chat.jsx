@@ -27,7 +27,7 @@ const Chat = () => {
     isDeleteActionModalOpen,
     chatToDelete,
     setCurrentChat,
-    profilePic,
+    //profilePic,
     isSideMenuOpen,
     setIsSideMenuOpen,
   } = useContext(ChatsContext);
@@ -165,8 +165,8 @@ const Chat = () => {
       <SideMenu
         setIsSideMenuOpen={setIsSideMenuOpen}
         isSideMenuOpen={isSideMenuOpen}
-        userName={user}
-        profile={profilePic}
+        user={user}
+       // profile={profilePic}
       />
       <ChangePicModal />
     </div>

@@ -2,9 +2,10 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { ChatsContext } from "../../contexts/ChatsContext";
 import { AuthContext } from "../../contexts/AuthContext";
-import { baseUrl, postFileRequest } from "../../utils/services";
+import { baseUrl, postFileRequest, postRequest, putRequest } from "../../utils/services";
 import LoadingIcons from "react-loading-icons";
 const ChangePicModal = () => {
+  const {setUser} = useContext(AuthContext)
   const {
     isChangePicModalOpen,
     changePicItemRef,
@@ -12,6 +13,7 @@ const ChangePicModal = () => {
     respModalChangePicItemRef,
     setProfilePic,
   } = useContext(ChatsContext);
+
   const { user } = useContext(AuthContext);
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -20,7 +22,6 @@ const ChangePicModal = () => {
   const [uploadError, setIsUploadError] = useState(null);
   const inputRef = useRef(null);
   const changePicRef = useRef(null);
-  const formData = new FormData();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -72,18 +73,20 @@ const ChangePicModal = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
+       
       };
       reader.readAsDataURL(file);
     }
   };
   const handleUpload = async () => {
     setFileUploadLoading(true);
-    formData.append("image", file);
+   
     //formData.append("userId", user?._id);
     if (file) {
-      const response = await postFileRequest(
-        `${baseUrl}/uploads/${user?._id}`,
-        formData
+      const response = await putRequest(
+        `${baseUrl}/users/${user?._id}`,
+        JSON.stringify({ userPicture:imagePreview}),
+        "include"
       );
 
       if (response.error) {
@@ -95,7 +98,8 @@ const ChangePicModal = () => {
       }
 
       if (response.data) {
-        setProfilePic(response.data);
+        setProfilePic(response?.data?.profilePic);
+         localStorage.setItem("user", JSON.stringify(response.data));
         setFileUploadLoading(false);
         setIsSuccessResponse(response.message);
         setTimeout(() => {

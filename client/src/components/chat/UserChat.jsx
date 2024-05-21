@@ -26,7 +26,7 @@ const UserChat = ({
     chats,
     newMessage,
     profilePictures,
-
+     allUsers,
     setChatToDelete,
     setIsDeleteActionModalOpen,
   } = useContext(ChatsContext);
@@ -64,6 +64,12 @@ const UserChat = ({
   // const handleNavigate = () => {
   //   Navigate("/chatbox");
   // };
+  
+  const findUserProfilePic = ()=>{
+    const user = allUsers?.find((user) => user?._id === recipientId)
+    const profilePic =  user?.profilePic
+    return profilePic
+  }
   return (
     <div
       // onClick={handleNavigate}
@@ -86,11 +92,12 @@ const UserChat = ({
           <img
             className="w-[30px] h-[30px] rounded-full"
             src={
-              profilePictures.find((pic) => pic?.userId === recipientId)
-                ?.fileName
-                ? `${uploadUrl}/uploads/` +
-                  profilePictures.find((pic) => pic?.userId === recipientId)
-                    ?.fileName
+             // allUsers.find((user) => user?._id === recipientId)
+                findUserProfilePic()
+                ? findUserProfilePic()
+                // `${uploadUrl}/uploads/` +
+                //   profilePictures.find((pic) => pic?.userId === recipientId)
+                //     ?.fileName
                 : NoProfile
             }
             alt="profile-pic"

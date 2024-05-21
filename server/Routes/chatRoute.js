@@ -7,6 +7,7 @@ const {
   deleteSingleChat,
 } = require("../Controller/chatController");
 
+
 router.post("/", createChat);
 router.get("/:userId", getAllUserChats);
 router.get("/find/:userId/:recipientId", getSingleChat);

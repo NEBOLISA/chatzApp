@@ -15,6 +15,12 @@ body {
 .right {
   display: flex;
 }
+.skeleton span{
+  width: 1200px;
+    display: flex;
+    overflow-x: hidden;
+    /* overflow-y: hidden; */
+}
 @media (max-width: 900px) {
   .chatbox {
     height: calc(100dvh - 126px);

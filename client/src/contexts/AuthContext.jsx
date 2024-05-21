@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { createContext, useCallback, useEffect, useState } from "react";
-import { baseUrl, postFileRequest, postRequest } from "../utils/services";
+import { baseUrl, postRequest } from "../utils/services";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -14,6 +15,7 @@ export const AuthContextProvider = ({ children }) => {
     name: "",
     email: "",
     password: "",
+    profilePic:""
   });
   const [loginInfo, setLoginInfo] = useState({
     email: "",
@@ -22,14 +24,14 @@ export const AuthContextProvider = ({ children }) => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-
+ const navigate = useNavigate()
   //const [formData, setFormData] = useState(null);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     setUser(JSON.parse(user));
   }, []);
-  const formData = new FormData();
+  // const formData = new FormData();
   const handleFileChange = useCallback(
     (event) => {
       const file = event.target.files[0];
@@ -37,6 +39,7 @@ export const AuthContextProvider = ({ children }) => {
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
+          setRegisterInfo((prev) => ({ ...prev, profilePic: reader.result }));
           setImagePreview(reader.result);
         };
         reader.readAsDataURL(file);
@@ -69,18 +72,18 @@ export const AuthContextProvider = ({ children }) => {
       JSON.stringify(registerInfo)
     );
 
-    formData.append("image", selectedFile);
-    formData.append("userId", response?._id);
+    // formData.append("image", selectedFile);
+    // formData.append("userId", response?._id);
 
-    if (selectedFile) {
-      const response2 = await postFileRequest(`${baseUrl}/uploads`, formData);
-      if (response2.error) {
-        return console.log(response2);
-      } else {
-        console.log(response2);
-      }
-      setisRegisterLoading(false);
-    }
+    // if (selectedFile) {
+    //   const response2 = await postFileRequest(`${baseUrl}/uploads`, formData);
+    //   if (response2.error) {
+    //     return console.log(response2);
+    //   } else {
+    //     console.log(response2);
+    //   }
+    //   setisRegisterLoading(false);
+    // }
 
     if (response.error) {
       return setRegisterError(response);
@@ -94,14 +97,20 @@ export const AuthContextProvider = ({ children }) => {
 
     const response = await postRequest(
       `${baseUrl}/users/login`,
-      JSON.stringify(loginInfo)
+      JSON.stringify(loginInfo),
+      "include"
     );
     setisLoginLoading(false);
     if (response.error) {
       return setLoginError(response);
     }
     localStorage.setItem("user", JSON.stringify(response));
-    setUser(response);
+    if(response.login){
+ setUser(response);
+    }else{
+      navigate("/login")
+    }
+   
   }, [loginInfo]);
 
   return (

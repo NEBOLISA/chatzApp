@@ -2,7 +2,7 @@
 export const baseUrl = "https://chatzapp-1.onrender.com/api";
 export const uploadUrl = "https://chatzapp-1.onrender.com";
 // export const baseUrl = "http://localhost:5000/api";
-// export const uploadUrl = "http://localhost:5000";
+//  export const uploadUrl = "http://localhost:5000";
 
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -34,12 +34,13 @@ export const postFileRequest = async (url, formData) => {
   // }
   // return data;
 };
-export const postRequest = async (url, body) => {
+export const postRequest = async (url, body, credentials="omit") => {
   const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    credentials,
     body,
   });
 
@@ -75,12 +76,13 @@ export const getRequest = async (url) => {
   }
   return data;
 };
-export const putRequest = async (url, body = "") => {
+export const putRequest = async (url, body = "", credentials = "omit") => {
   const response = await fetch(url, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
+    credentials,
     body,
   });
 

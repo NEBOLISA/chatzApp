@@ -1,6 +1,7 @@
 const userModel = require("../Models/userModel");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
+
 const jwt = require("jsonwebtoken");
 
 const generateToken = (_id) => {
@@ -25,7 +26,7 @@ const registerUser = async (req, res) => {
         .status(400)
         .json({ message: "Password must be a strong password" });
 
-    user = new userModel({ name, email, password });
+    user = new userModel({...req.body });
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
@@ -52,12 +53,35 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password " });
     const isValidPassword = await bcrypt.compare(password, user.password);
 
-    if (!isValidPassword)
-      return res.status(400).json({ message: "Wrong password" });
-    const token = generateToken(user._id);
-    res
-      .status(200)
-      .json({ _id: user._id, name: user.name, email, token, password });
+    if (!isValidPassword) {
+      return res.status(400).json({login:false, message: "Wrong password" });
+    } else {
+      const accessToken = jwt.sign(
+        { email: user.email, _id: user._id },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1m" }
+      );
+      const refreshToken = jwt.sign(
+        { email: user.email, _id: user._id },
+        process.env.JWT_REFRESH_KEY,
+        { expiresIn: "5m" }
+      );
+      return res
+        .cookie("accessToken", accessToken, {
+          maxAge: 60000,
+          httpOnly: true,
+        })
+        .cookie("refreshToken", refreshToken, {
+          maxAge: 300000,
+          httpOnly: true,
+          secure: true,
+          sameSite: true,
+        })
+        .status(200)
+        .json({ login: true, _id: user._id, name: user.name, email, password,
+          profilePic:user.profilePic });
+    }
+
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -83,7 +107,7 @@ const getUsers = async (req, res) => {
     res.status(500).json(err);
   }
 };
-const updateUser = async (req, res) => {
+const updateUserName = async (req, res) => {
   try {
     const { userId, changedName } = req.body;
     const user = await userModel.findById(userId);
@@ -96,4 +120,18 @@ const updateUser = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-module.exports = { registerUser, loginUser, findUser, getUsers, updateUser };
+const updateUserPicture = async (req, res) => {
+  try {
+    const {  userPicture } = req.body;
+    const {userId} = req.params
+    const user = await userModel.findById(userId);
+    user.profilePic = userPicture;
+
+    const response = await user.save();
+    res.status(200).json({ data: response,message:"Image successfully uploaded", status: 200 });
+  } catch (error) {
+    console.error("Error updating profile picture:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+module.exports = { registerUser, loginUser, findUser, getUsers, updateUserName,updateUserPicture };

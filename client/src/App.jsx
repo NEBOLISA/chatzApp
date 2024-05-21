@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
+import { Routes, Route,  Navigate} from "react-router-dom";
 import Chat from "./pages/Chat";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -10,9 +10,13 @@ import "react-toastify/dist/ReactToastify.css";
 import ChatBox from "./components/chat/ChatBox";
 
 function App() {
+  
   const { user } = useContext(AuthContext);
+ 
+  
+  
   return (
-    <BrowserRouter>
+  
       <div className="h-[90vh]  ">
         <ToastContainer />
         <Navbar />
@@ -30,7 +34,7 @@ function App() {
           </Routes>
         </div>
       </div>
-    </BrowserRouter>
+  
   );
 }
 

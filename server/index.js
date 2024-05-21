@@ -14,7 +14,12 @@ const path = require("path");
 
 app.use(express.json({limit:"50mb"}));
 
-app.use(cors({ origin: [process.env.FRONTEND_URL,], credentials: true }));
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL, process.env.BACKEND_API],
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 const uploadsPath = path.join(__dirname, "uploads");
 app.use("/uploads", express.static(uploadsPath));

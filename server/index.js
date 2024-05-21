@@ -16,7 +16,7 @@ app.use(express.json({limit:"50mb"}));
 
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL, process.env.BACKEND_API],
+    origin: "https://chatzapp-2.onrender.com/",
     credentials: true,
   })
 );

@@ -35,7 +35,7 @@ export const postFileRequest = async (url, formData) => {
   // }
   // return data;
 };
-export const postRequest = async (url, body, credentials="omit") => {
+export const postRequest = async (url, body, credentials="include") => {
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -60,8 +60,12 @@ export const postRequest = async (url, body, credentials="omit") => {
   return data;
 };
 
-export const getRequest = async (url) => {
-  const response = await fetch(url);
+export const getRequest = async (url, credentials = "include") => {
+  const response = await fetch(url, {
+    method: "GET",
+    credentials,
+  
+  });
 
   const data = await response.json();
 
@@ -101,9 +105,10 @@ export const putRequest = async (url, body = "", credentials = "omit") => {
   }
   return data;
 };
-export const deleteRequest = async (url) => {
+export const deleteRequest = async (url,credentials="include") => {
   const response = await fetch(url, {
     method: "DELETE",
+    credentials
   });
 
   const data = await response.json();

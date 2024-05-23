@@ -7,7 +7,7 @@ import { ChatsContext } from "../../contexts/ChatsContext";
 import moment from "moment";
 import { useFetchLastMessage } from "../../hooks/useFetchLastMessage";
 import { Navigate } from "react-router-dom";
-import { uploadUrl } from "../../utils/services";
+// import { uploadUrl } from "../../utils/services";
 /* eslint-disable react/prop-types */
 const UserChat = ({
   chat,

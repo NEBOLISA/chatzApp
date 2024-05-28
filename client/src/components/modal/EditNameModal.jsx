@@ -16,7 +16,6 @@ const EditNameModal = ({ isEditNameModalOpen, headerText }) => {
     respModalMenuItemRef,
   } = useContext(ChatsContext);
   const { user } = useContext(AuthContext);
-  //const [name, setName] = useState(changedName);
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current.focus();
@@ -64,7 +63,6 @@ const EditNameModal = ({ isEditNameModalOpen, headerText }) => {
             ref={inputRef}
             onChange={(e) => {
               setChangedName(e.target.value);
-              //setName(e.target.value);
             }}
             value={changedName}
           />

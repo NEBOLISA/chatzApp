@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   baseUrl,
-  deleteRequest,
+
   getRequest,
   postRequest,
   putRequest,
@@ -33,7 +33,6 @@ export const ChatsContextProvider = ({ children }) => {
   const [potentialChatsLoading, setIsPotentialChatsLoading] = useState(false);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState(null);
-  const [allMessages, setAllMessages] = useState(null);
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
   const [messagesError, setMessagesError] = useState(null);
   const [sendTextMessageError, setSendTextMessageError] = useState(null);
@@ -67,6 +66,7 @@ export const ChatsContextProvider = ({ children }) => {
   const hambugerItemRef = useRef(null);
   const [navUserName, setNavUserName] = useState(null);
   const [chatsUpdate, setIsChatsUpdate] = useState(false);
+  const [currentMessage,setCurrentMessage] = useState(null)
   useEffect(() => {
     const newSocket = io("https://chatzapp-2-socket.onrender.com");
     // const newSocket = io("http://localhost:3000");
@@ -95,18 +95,18 @@ export const ChatsContextProvider = ({ children }) => {
 
     const recipientId = currentChat?.members.find((id) => id !== user?._id);
 
-    socket.emit("sendMessage", { ...newMessage, recipientId, newChat });
+    socket.emit("sendMessage", { ...newMessage,recipientId});
 
-    //console.log(chats);
   }, [newMessage]);
 
   useEffect(() => {
     if (socket === null) return;
 
     socket.on("getMessage", (res) => {
-      //if (currentChat?.members[1] === res.recipientId)
-        setMessages((prev) => [...prev, res]);
-
+     
+       setMessages((prev) => [...prev, res]);
+         setCurrentMessage(res)
+       
       const isChatCreated = chats.find(
         (chat) =>
           (chat?.members[0] === res.receiverId &&
@@ -118,7 +118,6 @@ export const ChatsContextProvider = ({ children }) => {
         return;
       } else {
         createChat(res.senderId, res.receiverId);
-        //setChats((prev) => [...prev, res.newChat]);
       }
     });
     socket.on("getNotification", (res) => {
@@ -138,6 +137,7 @@ export const ChatsContextProvider = ({ children }) => {
       socket.off("getNotification");
     };
   }, [socket, currentChat, chats, messages]);
+
   // fetch notifications
   useEffect(() => {
     const getNotifications = async () => {
@@ -273,29 +273,7 @@ export const ChatsContextProvider = ({ children }) => {
 
     getPotentialUsers();
   }, [chats]);
-  // useEffect(() => {
-  //   const getAllPics = async () => {
-  //     const response = await getRequest(`${baseUrl}/uploads/`);
-  //     if (response.error) {
-  //       return console.log("Error fetching pictures", response);
-  //     }
-  //     setProfilePictures(response);
-  //   };
-  //   getAllPics();
-  // }, [potentialChats]);
-
-  // useEffect(() => {
-  //   const getProfilePic = async () => {
-  //     const response = await getRequest(`${baseUrl}/uploads/${user?._id}`);
-
-  //     if (response?.error) {
-  //       return console.log("Error fetching users", response);
-  //     }
-  //     setProfilePic(response);
-  //   };
-
-  //   getProfilePic();
-  // }, [user, potentialChats]);
+  
   const handleOpenModal = useCallback(() => {
     setIsEditNameModalOpen(true);
   }, [isEditNameModalOpen]);
@@ -489,6 +467,8 @@ export const ChatsContextProvider = ({ children }) => {
         hambugerItemRef,
         navUserName,
         potentialChatsLoading,
+        currentMessage,
+        setCurrentMessage,
       }}
     >
       {children}

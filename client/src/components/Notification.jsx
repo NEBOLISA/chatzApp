@@ -3,7 +3,6 @@ import { ChatsContext } from "../contexts/ChatsContext";
 import moment from "moment";
 const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
-  //   const [isHover, setIsHover] = useState(false);
   const {
     notifications,
     allUsers,
@@ -53,7 +52,6 @@ const Notification = () => {
       updateCurrentChat(chatToOpen);
     }
 
-    //console.log(chatToOpen);
   };
   return (
     <div ref={notificationMenuRef}>

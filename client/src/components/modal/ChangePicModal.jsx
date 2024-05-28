@@ -2,10 +2,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { ChatsContext } from "../../contexts/ChatsContext";
 import { AuthContext } from "../../contexts/AuthContext";
-import { baseUrl, postFileRequest, postRequest, putRequest } from "../../utils/services";
+import { baseUrl,  putRequest } from "../../utils/services";
 import LoadingIcons from "react-loading-icons";
 const ChangePicModal = () => {
-  const {setUser} = useContext(AuthContext)
   const {
     isChangePicModalOpen,
     changePicItemRef,
@@ -81,7 +80,6 @@ const ChangePicModal = () => {
   const handleUpload = async () => {
     setFileUploadLoading(true);
    
-    //formData.append("userId", user?._id);
     if (file) {
       const response = await putRequest(
         `${baseUrl}/users/${user?._id}`,

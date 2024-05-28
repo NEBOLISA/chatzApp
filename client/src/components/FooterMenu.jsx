@@ -1,4 +1,3 @@
-// import { useState } from "react";
 
 /* eslint-disable react/prop-types */
 const FooterMenu = ({ isActive, setActive }) => {

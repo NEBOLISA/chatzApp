@@ -25,13 +25,11 @@ export const AuthContextProvider = ({ children }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
  const navigate = useNavigate()
-  //const [formData, setFormData] = useState(null);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     setUser(JSON.parse(user));
   }, []);
-  // const formData = new FormData();
   const handleFileChange = useCallback(
     (event) => {
       const file = event.target.files[0];
@@ -59,9 +57,7 @@ export const AuthContextProvider = ({ children }) => {
     setLoginInfo(info);
   }, []);
 
-  // formData.forEach((value, key) => {
-  //   console.log("form", key, value);
-  // });
+  
 
   const registerUser = useCallback(async () => {
     setisRegisterLoading(true);
@@ -72,18 +68,7 @@ export const AuthContextProvider = ({ children }) => {
       JSON.stringify(registerInfo)
     );
 
-    // formData.append("image", selectedFile);
-    // formData.append("userId", response?._id);
-
-    // if (selectedFile) {
-    //   const response2 = await postFileRequest(`${baseUrl}/uploads`, formData);
-    //   if (response2.error) {
-    //     return console.log(response2);
-    //   } else {
-    //     console.log(response2);
-    //   }
-    //   setisRegisterLoading(false);
-    // }
+  
 
     if (response.error) {
       return setRegisterError(response);

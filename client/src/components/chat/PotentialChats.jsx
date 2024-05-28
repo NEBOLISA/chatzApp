@@ -10,27 +10,11 @@ const PotentialChats = ({ isActive }) => {
   const { user } = useContext(AuthContext);
   const {
     potentialChats,
-    //isChatsLoading,
     createChat,
     onlineUsers,
     potentialChatsLoading,
   } = useContext(ChatsContext);
 
-  // if (potentialChatsLoading)
-  //   return (
-  //     <div className="lg:flex mb-9 lg:overflow-x-scroll lg:overflow-y-scroll w-[100vw] sm:hidden ">
-  //       <Skeleton
-  //         count={14}
-  //         style={{
-  //           width: "100px",
-  //           height: "20px",
-  //           marginLeft: "15px",
-  //         }}
-  //         inline={true}
-  //       />
-       
-  //     </div>
-  //   );
 
   return (
     <div
@@ -67,11 +51,7 @@ const PotentialChats = ({ isActive }) => {
                   src={
                     u?.profilePic
                       ? u.profilePic
-                      : // profilePictures.find((pic) => pic?.userId === u?._id)
-                        //   ?.fileName
-                        //   ? `${uploadUrl}/uploads/` +
-                        //     profilePictures.find((pic) => pic?.userId === u?._id)
-                        //       ?.fileName
+                      : 
                         NoProfile
                   }
                   alt="profilePic"

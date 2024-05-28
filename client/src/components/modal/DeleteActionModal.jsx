@@ -18,9 +18,7 @@ const DeleteActionModal = ({
         deleteModalRef.current &&
         !deleteModalRef.current.contains(event.target)
       ) {
-        // modalMenuItemRef.current.contains(event.target)
-        // ? setIsModalOpen(true)
-        //   :
+       
         setIsDeleteActionModalOpen(false);
       }
     };

@@ -4,7 +4,6 @@ import NoProfile from "../assets/avatar.svg";
 import { useContext, useEffect, useRef } from "react";
 import { ChatsContext } from "../contexts/ChatsContext";
 const SideMenu = ({ isSideMenuOpen,  user, setIsSideMenuOpen }) => {
- // const {user} = useContext(AuthContext)
   const {
     logout,
     setIsEditNameModalOpen,
@@ -31,7 +30,6 @@ const SideMenu = ({ isSideMenuOpen,  user, setIsSideMenuOpen }) => {
         if (hambugerItemRef.current.contains(event.target)) {
           setIsSideMenuOpen(true);
         }
-        // setIsSideMenuOpen(false);
       }
     };
 
@@ -81,9 +79,7 @@ const SideMenu = ({ isSideMenuOpen,  user, setIsSideMenuOpen }) => {
         </div>
 
         <div className="">
-          {/* <p className="p-2 cursor-pointer mb-1 hover:bg-slate-300">
-            Notifications
-          </p> */}
+          
           <div
             ref={respModalMenuItemRef}
             onClick={handleOpenModal}

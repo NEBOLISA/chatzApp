@@ -86,9 +86,7 @@ const Navbar = () => {
                         className="w-[30px] h-[30px] ml-3 rounded-full object-cover"
                         src={
                           profilePic? profilePic:NoProfile
-                          // profilePic
-                          //   ? `${uploadUrl}/uploads/` + profilePic?.fileName
-                          //   : NoProfile
+                        
                         }
                         alt="profile"
                       />

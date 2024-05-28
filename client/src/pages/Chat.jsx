@@ -27,7 +27,6 @@ const Chat = () => {
     isDeleteActionModalOpen,
     chatToDelete,
     setCurrentChat,
-    //profilePic,
     isSideMenuOpen,
     setIsSideMenuOpen,
   } = useContext(ChatsContext);
@@ -105,7 +104,7 @@ const Chat = () => {
                     <div
                       className=""
                       key={index}
-                      onClick={() => updateCurrentChat(chat)}
+                      onClick={() => {currentChat?._id !== chat?._id &&updateCurrentChat(chat)}}
                     >
                       <UserChat
                         chat={chat}
@@ -166,7 +165,6 @@ const Chat = () => {
         setIsSideMenuOpen={setIsSideMenuOpen}
         isSideMenuOpen={isSideMenuOpen}
         user={user}
-       // profile={profilePic}
       />
       <ChangePicModal />
     </div>

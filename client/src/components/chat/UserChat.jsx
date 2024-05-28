@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from "react";
 import NoProfile from "../../assets/avatar.svg";
 import { useFetchRecipient } from "../../hooks/useFetchRecipient";
@@ -6,9 +7,7 @@ import { useFetchRecipient } from "../../hooks/useFetchRecipient";
 import { ChatsContext } from "../../contexts/ChatsContext";
 import moment from "moment";
 import { useFetchLastMessage } from "../../hooks/useFetchLastMessage";
-import { Navigate } from "react-router-dom";
-// import { uploadUrl } from "../../utils/services";
-/* eslint-disable react/prop-types */
+
 const UserChat = ({
   chat,
   user,
@@ -17,15 +16,13 @@ const UserChat = ({
   openChatIndices,
   dropDownRef,
   setOpenChatIndices,
-  // handleNavigate
 }) => {
   const { recipientUser } = useFetchRecipient(chat, user);
   const {
     onlineUsers,
     notifications,
-    chats,
+    
     newMessage,
-    profilePictures,
      allUsers,
     setChatToDelete,
     setIsDeleteActionModalOpen,
@@ -35,7 +32,7 @@ const UserChat = ({
   const { latestMessage, error } = useFetchLastMessage(chat);
 
   const recipientId = chat?.members?.find((id) => id !== user?._id);
-
+     
   useEffect(() => {
     const chatNot = notifications?.filter(
       (not) => not?.senderId === recipientId
@@ -61,9 +58,7 @@ const UserChat = ({
     );
     e.stopPropagation();
   };
-  // const handleNavigate = () => {
-  //   Navigate("/chatbox");
-  // };
+  
   
   const findUserProfilePic = ()=>{
     const user = allUsers?.find((user) => user?._id === recipientId)
@@ -72,7 +67,7 @@ const UserChat = ({
   }
   return (
     <div
-      // onClick={handleNavigate}
+    
       className=" flex justify-between cursor-pointer relative   border-b-[.3px]  border-[#AEAEAE] h-[70px] py-2 px-2 hover:bg-[#e4e4e4] group"
     >
       {openChatIndices[index] === true && (
@@ -92,12 +87,9 @@ const UserChat = ({
           <img
             className="w-[30px] h-[30px] rounded-full"
             src={
-             // allUsers.find((user) => user?._id === recipientId)
                 findUserProfilePic()
                 ? findUserProfilePic()
-                // `${uploadUrl}/uploads/` +
-                //   profilePictures.find((pic) => pic?.userId === recipientId)
-                //     ?.fileName
+            
                 : NoProfile
             }
             alt="profile-pic"

@@ -21,19 +21,7 @@ export const postFileRequest = async (url, formData) => {
     console.error("Error:", error);
     return { error: true, message: "An error occurred" };
   }
-  // const data = await response.data;
-
-  // if (!response.ok) {
-  //   let message;
-  //   if (response?.data) {
-  //     message = response?.data;
-  //   } else {
-  //     message = response.data; //"Network error";
-  //   }
-
-  //   return { error: true, message };
-  // }
-  // return data;
+  
 };
 export const postRequest = async (url, body, credentials="include") => {
   const response = await fetch(url, {
@@ -52,7 +40,7 @@ export const postRequest = async (url, body, credentials="include") => {
     if (data?.message) {
       message = data.message;
     } else {
-      message = JSON.stringify(data); //"Network error";
+      message = JSON.stringify(data); 
     }
 
     return { error: true, message };
@@ -74,7 +62,7 @@ export const getRequest = async (url, credentials = "include") => {
     if (data?.message) {
       message = data.message;
     } else {
-      message = JSON.stringify(data); //"Network error";
+      message = JSON.stringify(data);
     }
 
     return { error: true, message };
@@ -98,7 +86,7 @@ export const putRequest = async (url, body = "", credentials = "omit") => {
     if (data?.message) {
       message = data.message;
     } else {
-      message = JSON.stringify(data); //"Network error";
+      message = JSON.stringify(data); 
     }
 
     return { error: true, message };
@@ -120,7 +108,7 @@ export const deleteRequest = async (url,credentials="include") => {
       toast.error("Error deleting chat, try again", { autoClose: 1000 });
     } else {
       toast.error("Cannot delete", { autoClose: 1000 });
-      message = JSON.stringify(data); //"Network error";
+      message = JSON.stringify(data); 
     }
 
     return { error: true, message };

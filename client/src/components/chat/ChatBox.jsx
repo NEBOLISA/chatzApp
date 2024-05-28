@@ -2,7 +2,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ChatsContext } from "../../contexts/ChatsContext";
-import { useFetchRecipient } from "../../hooks/useFetchRecipient";
+
 import Alert from "../Alert";
 import moment from "moment";
 import InputEmoji from "react-input-emoji";
@@ -14,14 +14,21 @@ const ChatBox = ({ handleBackToChats }) => {
     isMessagesLoading,
     messagesError,
     sendMessage,
+    newMessage,
+    allUsers,
+  
     sendTextMessageError,
   } = useContext(ChatsContext);
 
   const [textMessage, setTextMessage] = useState("");
   const [btnDisabled, setBtnDisabled] = useState(true);
-  const { recipientUser } = useFetchRecipient(currentChat, user);
+ 
   const scrollRef = useRef();
   const recipientId = currentChat?.members.find((id) => id !== user?._id);
+
+ const recipUser = allUsers.find((user) => user?._id === recipientId);
+
+
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, currentChat]);
@@ -30,8 +37,8 @@ const ChatBox = ({ handleBackToChats }) => {
     else {
       setBtnDisabled(true);
     }
-  }, [textMessage]);
-
+  }, [textMessage,newMessage]);
+ 
   if (messagesError) {
     return (
       <p className="text-center w-[100%]">
@@ -39,21 +46,15 @@ const ChatBox = ({ handleBackToChats }) => {
       </p>
     );
   }
+  
 
-  // if (!recipientUser) {
-  //   return (
-  //     <p className="text-center text-gray-400 font-bold text-2xl w-[100%] h-[70vh] flex items-center justify-center">
-  //       No conversations yet
-  //     </p>
-  //   );
-  // }
 
   return (
     <div className="w-[100%] chatbox    lg:h-[100%] relative bg-[#cccdd5] rounded-lg    flex flex-col justify-between ">
       <div className=" flex overflow-y-hidden flex-col ">
         <div className=" bg-[#e7e7e7] relative text-gray-600 text-center p-2 rounded-tl-lg rounded-tr-lg">
           <strong>
-            {isMessagesLoading ? "Loading.." : recipientUser?.name}
+            {isMessagesLoading ? "Loading.." : recipUser?.name}
           </strong>
           <div
             onClick={handleBackToChats}
@@ -76,7 +77,7 @@ const ChatBox = ({ handleBackToChats }) => {
         </div>
         <div className="  relative flex-1 flex flex-col overflow-y-scroll ">
           {messages &&
-            messages.map((message, index) => (
+            messages?.map((message, index) => (
               <div
                 key={index}
                 ref={scrollRef}
@@ -92,7 +93,7 @@ const ChatBox = ({ handleBackToChats }) => {
                       : " bg-white text-gray-600"
                   } p-3 rounded-[5px] max-w-fit   flex flex-col mt-8 font-light text-md mx-3`}
                 >
-                  <span className="">{message.text}</span>
+                  <span className="">{message?.text}</span>
                   <span className="text-[12px]">
                     {moment(message.createdAt).calendar()}
                   </span>

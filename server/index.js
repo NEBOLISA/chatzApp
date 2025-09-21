@@ -18,6 +18,7 @@ app.use(
   cors({
     origin: "https://chatzapp-2.onrender.com",
     // origin:"http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );

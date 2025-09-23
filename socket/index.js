@@ -2,8 +2,8 @@ const { Server } = require("socket.io");
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 const io = new Server({
-  cors: "https://chatzapp-2.onrender.com/",
-});
+  cors: 'https://chatzapp-1.onrender.com'
+})
 // const io = new Server({
 //   cors: "http://localhost:5173/",
 // });

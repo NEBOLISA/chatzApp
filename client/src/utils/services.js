@@ -13,6 +13,7 @@ export const postFileRequest = async (url, formData) => {
   try {
     const response = await axios.post(url, formData, {
       headers: { "Content-Type": "multipart/form-data" },
+      
     });
 
     return response.data;

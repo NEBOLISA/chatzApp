@@ -26,7 +26,7 @@ const Register = () => {
       ...registerInfo,
       [name]: value,
     });
-    console.log(registerInfo)
+   
   };
  const truncateText = (text, textSize) => {
    if (text.length > textSize) {
@@ -177,7 +177,7 @@ const Register = () => {
               btnDisabled === true ? "bg-gray-500" : "bg-blue-500 "
             } w-full  flex items-center justify-center bg-blue-600 text-white text-sm rounded-sm py-1 mt-3`}
           >
-            {isRegisterLoading ? (
+            {isRegisterLoading && !registerError?.message ? (
               <LoadingIcons.Bars speed={1} width={20} height={20} />
             ) : (
               "Register"

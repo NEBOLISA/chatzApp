@@ -11,31 +11,65 @@ import ChatBox from "./components/chat/ChatBox";
 
 function App() {
   
-  const { user } = useContext(AuthContext);
  
   
-  
   return (
-  
-      <div className="h-[90vh]  ">
-        <ToastContainer />
-        <Navbar />
+    <div className='h-[90vh]  '>
+      <ToastContainer />
+      <Navbar />
 
-        <div className="mx-auto h-[100%]   sm:w-[100%] lg:w-[95%] xl:w-3/4  w-3/4  ">
-          <Routes>
-            <Route path="/" element={user ? <Chat /> : <Login />}></Route>
-            <Route path="/login" element={user ? <Chat /> : <Login />}></Route>
-            <Route
-              path="/register"
-              element={user ? <Chat /> : <Register />}
-            ></Route>
-            <Route path="/*" element={<Navigate to="/" />}></Route>
-            <Route path="/chatbox" element={user && <ChatBox />}></Route>
-          </Routes>
-        </div>
+      <div className='mx-auto h-[100%]   sm:w-[100%] lg:w-[95%] xl:w-3/4  w-3/4  '>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/login'
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path='/register'
+            element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path='/chatbox'
+            element={
+              <ProtectedRoute>
+                <ChatBox />
+              </ProtectedRoute>
+            }
+          />
+          <Route path='/*' element={<Navigate to='/' />} />
+        </Routes>
       </div>
-  
-  );
+    </div>
+  )
 }
 
 export default App;
+// utils/ProtectedRoute.jsx
+
+
+
+ const ProtectedRoute = ({ children }) => {
+  const { user } = useContext(AuthContext);
+  return user ? children : <Navigate to="/login" replace />;
+};
+
+export const PublicRoute = ({ children }) => {
+  const { user } = useContext(AuthContext);
+  return !user ? children : <Navigate to="/" replace />;
+};

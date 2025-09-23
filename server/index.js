@@ -16,7 +16,7 @@ app.use(express.json({limit:"50mb"}));
 
 app.use(
   cors({
-    origin: 'https://chatzapp-1.onrender.com',
+    origin: 'https://chatzapp-2.onrender.com',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
